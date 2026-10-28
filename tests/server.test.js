@@ -66,7 +66,8 @@ test('Gemini voice without a key falls back to another voice mode', async () => 
 });
 
 test('launch --selftest plays a whole test-mode game and exits 0', async () => {
-  const env = { ...process.env, VREKI_PORT: String(srv.port + 20), VREKI_NO_BROWSER: '1', VREKI_DATA_DIR: fs.mkdtempSync(path.join(os.tmpdir(), 'ww-self-')) };
+  const free = await new Promise((r) => { const t = require('net').createServer().listen(0, '127.0.0.1', () => { const port = t.address().port; t.close(() => r(port)); }); });
+  const env = { ...process.env, VREKI_PORT: String(free), VREKI_NO_BROWSER: '1', VREKI_DATA_DIR: fs.mkdtempSync(path.join(os.tmpdir(), 'ww-self-')) };
   const out = await new Promise((resolve) => {
     const ch = spawn(process.execPath, [path.join(__dirname, '..', 'app', 'launch.js'), '--selftest'], { env });
     let s = '';

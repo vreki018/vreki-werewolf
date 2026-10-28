@@ -32,6 +32,25 @@ const PKG = {
 };
 const LABEL = { claude: 'Claude Code', codex: 'Codex', python: 'Python', ffmpeg: 'ffmpeg' };
 
+// The Claude desktop app keeps its own Claude Code under
+// %LOCALAPPDATA%\Claude-Data\<pkg>\claude-code\<version>\<hash>\claude.exe — newest version wins.
+function newestDesktopClaude(localAppData) {
+  const ls = (d) => { try { return fs.readdirSync(d); } catch (_) { return []; } };
+  const root = localAppData && path.join(localAppData, 'Claude-Data');
+  const found = [];
+  for (const pkg of ls(root)) {
+    const cc = path.join(root, pkg, 'claude-code');
+    for (const v of ls(cc).filter((x) => /^\d+\.\d+\.\d+$/.test(x))) {
+      for (const h of ls(path.join(cc, v))) {
+        const f = path.join(cc, v, h, 'claude.exe');
+        if (exists(f)) found.push({ v: v.split('.').map(Number), f });
+      }
+    }
+  }
+  found.sort((a, b) => b.v[0] - a.v[0] || b.v[1] - a.v[1] || b.v[2] - a.v[2]);
+  return found[0]?.f || null;
+}
+
 // → { ok, path, runner: 'exe'|'node' } or { ok: false, reason }
 async function resolveTool(name, override, deps = {}) {
   const where = deps.where || whereExe;
@@ -42,18 +61,18 @@ async function resolveTool(name, override, deps = {}) {
     return { ok: true, path: override, runner: /\.js$/i.test(override) ? 'node' : 'exe' };
   }
   const lines = await where(name);
-  const exe = lines.find((l) => /\.exe$/i.test(l) && exists(l));
-  if (exe) return { ok: true, path: exe, runner: 'exe' };
   const pkg = PKG[name];
-  if (pkg) {
-    for (const dir of new Set(lines.map((l) => path.dirname(l)))) {
-      const f = path.join(dir, pkg.rel);
-      if (exists(f)) return { ok: true, path: f, runner: pkg.runner };
-    }
-    if (name === 'claude') {
-      const local = path.join(home, '.local', 'bin', 'claude.exe');
-      if (exists(local)) return { ok: true, path: local, runner: 'exe' };
-    }
+  // PATH order, like a terminal: the first entry that is an .exe, or an npm shim whose package is there
+  for (const l of lines) {
+    if (/\.exe$/i.test(l) && exists(l)) return { ok: true, path: l, runner: 'exe' };
+    const f = pkg && path.join(path.dirname(l), pkg.rel);
+    if (f && exists(f)) return { ok: true, path: f, runner: pkg.runner };
+  }
+  if (name === 'claude') {
+    const local = path.join(home, '.local', 'bin', 'claude.exe');
+    if (exists(local)) return { ok: true, path: local, runner: 'exe' };
+    const desktop = newestDesktopClaude(deps.localAppData || process.env.LOCALAPPDATA);
+    if (desktop) return { ok: true, path: desktop, runner: 'exe' };
   }
   return { ok: false, reason: lines.length ? `เจอ ${name} แต่เป็นตัวเรียกแบบ .cmd ที่ใช้ตรงๆ ไม่ได้` : `หาโปรแกรม ${name} ไม่เจอ` };
 }
@@ -107,7 +126,7 @@ const MIN_CLAUDE = '2.1.280'; // first Claude Code that runs claude-opus-5-5
 
 // adds login / version facts to a found CLI: { ready, reason, warn }
 async function checkCli(name, tool) {
-  if (!tool.ok) return { ready: false, reason: explainError(name, 'not found') };
+  if (!tool.ok) return { ready: false, reason: `${explainError(name, 'not found')}${tool.reason ? ` (${tool.reason})` : ''}` };
   const st = await runTool(tool, name === 'claude' ? ['auth', 'status', '--json'] : ['login', 'status']);
   if (parseLogin(name, st.code, st.out) === false) return { ready: false, reason: explainError(name, 'not logged in') };
   if (name === 'claude') {
@@ -185,4 +204,4 @@ async function testProvider(id, config, det) {
   return { ok: false, ms: r.ms || 0, message: explainError(id, `${r.error || ''} ${r.stderr || ''} ${r.text || ''}`, pc.model), raw: String(r.error || '').slice(0, 300) };
 }
 
-module.exports = { parseLogin, versionTooOld, resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };
+module.exports = { parseLogin, versionTooOld, checkCli, resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };

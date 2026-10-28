@@ -36,7 +36,8 @@ function clean(raw) {
   const r = raw && typeof raw === 'object' ? raw : {};
   const s = JSON.parse(JSON.stringify(DEFAULTS));
   if (Array.isArray(r.providers)) s.providers = [...new Set(r.providers.filter((p) => COMPANIES.includes(p)))];
-  for (const id of COMPANIES) { const m = str(r.models?.[id]); if (m && /^[\w.\-:]+$/.test(m)) s.models[id] = m; }
+  // first character a letter/digit: a name like "--flag" would be read as a CLI option
+  for (const id of COMPANIES) { const m = str(r.models?.[id]); if (m && /^[A-Za-z0-9][\w.\-:]*$/.test(m)) s.models[id] = m; }
   for (const id of Object.keys(s.effort)) if (EFFORTS.includes(r.effort?.[id])) s.effort[id] = r.effort[id];
   if (VOICES.includes(r.voice)) s.voice = r.voice;
   if (typeof r.showCompanies === 'boolean') s.showCompanies = r.showCompanies;

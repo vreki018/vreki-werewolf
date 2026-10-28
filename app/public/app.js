@@ -104,20 +104,22 @@ async function startGame(humanChar, view = 'audience') {
     $('#lobbyCast').classList.remove('picking'); $('#pickHint').hidden = true;
     return;
   }
+  goFullscreen(); // while the click still counts as a user gesture (fetches below can take a while)
+  const leaveFs = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); };
   const opts = { humanChar, mock, ...(window.SETUP ? SETUP.current() : {}) };
   const post = (extra) => fetch('/api/new', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...opts, ...extra }) });
   let r = await post({});
   if (r.status === 409) {
-    if (!(await SETUP.confirm('มีเกมกำลังเล่นอยู่ หยุดเกมนั้นแล้วเริ่มใหม่?'))) return;
+    if (!(await SETUP.confirm('มีเกมกำลังเล่นอยู่ หยุดเกมนั้นแล้วเริ่มใหม่?'))) { leaveFs(); return; }
     r = await post({ force: true });
   }
   if (!r.ok) {
     const j = await r.json().catch(() => ({}));
     err.textContent = j.error || 'เริ่มเกมไม่ได้';
     err.hidden = false;
+    leaveFs();
     return;
   }
-  goFullscreen();
   enterRoom({ view: humanChar == null ? view : 'player' });
 }
 

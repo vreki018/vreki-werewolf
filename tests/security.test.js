@@ -60,6 +60,13 @@ test('the page itself (same host, JSON) still works', async () => {
   assert.strictEqual(g.status, 200);
 });
 
+test('a Gemini key with spaces or line breaks inside is refused', async () => {
+  const r = await req('POST', '/api/settings', { headers: { ...own(), 'Content-Type': 'application/json' }, body: JSON.stringify({ geminiKey: 'abc\ndef' }) });
+  assert.strictEqual(r.status, 400);
+  assert.match(JSON.parse(r.body).error, /คีย์/);
+  assert.ok(!fs.existsSync(P.GEMINI_KEY_FILE));
+});
+
 test('a network-share override path is never used', async () => {
   const { resolveTool } = require('../app/detect');
   const r = await resolveTool('claude', '\\\\host\\share\\claude.exe', { where: () => [], home: os.tmpdir() });

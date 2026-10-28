@@ -55,6 +55,11 @@ test('invalid values fall back to defaults', () => {
   assert.strictEqual(s.effort.claude, DEFAULTS.effort.claude);
 });
 
+test('a model name that starts with "-" is refused (it would be read as a CLI flag)', () => {
+  const s = saveSettings({ models: { claude: '--dangerously-skip-permissions' } });
+  assert.strictEqual(s.models.claude, DEFAULTS.models.claude);
+});
+
 test('a corrupt settings file gives the defaults', () => {
   fs.writeFileSync(P.SETTINGS_FILE, '{not json');
   assert.deepStrictEqual(loadSettings(), DEFAULTS);

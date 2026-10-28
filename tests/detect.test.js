@@ -61,6 +61,31 @@ test('Python in a folder with a Thai name is still found', { timeout: 120000 }, 
   assert.ok(r.path.includes('ผู้ใช้ทดสอบ'), r.path);
 });
 
+test('the first claude on PATH wins, like in a terminal (an npm shim before a later .exe)', async () => {
+  const a = shimDir(); const b = shimDir();
+  a.touch('claude.cmd');
+  const first = a.touch('node_modules/@anthropic-ai/claude-code/bin/claude.exe');
+  const later = b.touch('claude.exe');
+  const r = await resolveTool('claude', null, { where: whereOf({ claude: [path.join(a.d, 'claude.cmd'), later] }), home: a.d });
+  assert.strictEqual(r.path, first);
+});
+
+test('Claude from the desktop app only is found (newest version)', async () => {
+  const { d, touch } = shimDir();
+  touch('Claude-Data/claude_x/claude-code/2.1.100/aaa/claude.exe');
+  const newest = touch('Claude-Data/claude_x/claude-code/2.1.309/bbb/claude.exe');
+  const r = await resolveTool('claude', null, { where: whereOf({}), home: path.join(d, 'nohome'), localAppData: d });
+  assert.deepStrictEqual(r, { ok: true, path: newest, runner: 'exe' });
+});
+
+test('the specific reason a CLI was not found reaches the setup card', async () => {
+  const { checkCli } = require('../app/detect');
+  const r = await checkCli('codex', { ok: false, reason: 'เจอ codex แต่เป็นตัวเรียกแบบ .cmd ที่ใช้ตรงๆ ไม่ได้' });
+  assert.strictEqual(r.ready, false);
+  assert.match(r.reason, /ยังไม่ได้ติดตั้ง Codex/);
+  assert.match(r.reason, /\.cmd/);
+});
+
 test('login status is read without spending quota', () => {
   const { parseLogin, versionTooOld } = require('../app/detect');
   assert.strictEqual(parseLogin('claude', 0, '{"loggedIn": true, "authMethod": "claude.ai"}'), true);

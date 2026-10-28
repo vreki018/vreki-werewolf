@@ -187,6 +187,9 @@ const server = http.createServer(async (req, res) => {
     if (p === '/api/settings' && req.method === 'POST') {
       const b = await body(req);
       delete b.paths; // program paths are never set over HTTP (the game runs them); edit data/settings.json by hand
+      if (typeof b.geminiKey === 'string' && b.geminiKey.trim() && !/^[\x21-\x7e]+$/.test(b.geminiKey.trim())) {
+        return json(res, 400, { error: 'คีย์ Gemini ต้องเป็นตัวอักษรภาษาอังกฤษ/ตัวเลขติดกัน ไม่มีช่องว่างหรือขึ้นบรรทัดใหม่' });
+      }
       if (typeof b.geminiKey === 'string' && b.geminiKey.trim()) {
         fs.mkdirSync(P.DATA, { recursive: true });
         fs.writeFileSync(P.GEMINI_KEY_FILE, b.geminiKey.trim());
@@ -286,7 +289,7 @@ const server = http.createServer(async (req, res) => {
     // static
     let f = p === '/' ? '/index.html' : p;
     f = path.normalize(path.join(PUB, f));
-    if (!f.startsWith(PUB) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('not found'); }
+    if (!f.startsWith(PUB + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('not found'); }
     res.writeHead(200, { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     fs.createReadStream(f).pipe(res);
   } catch (e) {
