@@ -1,0 +1,1 @@
+{"type":"object","properties":{"aside":{"type":"string"},"say":{"type":"string"},"suspect":{"type":"string"}},"required":["aside","say","suspect"],"additionalProperties":false}

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>หมู่บ้านหมาป่า</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,600;0,800;1,800;1,900&family=Mali:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app-color.css">
+<link rel="stylesheet" href="setup.css">
+<script>
+  // look: "color" (default since VreKi picked it 2026-10-18) or "ink" (black-and-white comic) — from ?look=… or the last choice (avatars.js saves it)
+  try { if ((new URLSearchParams(location.search).get('look') || localStorage.getItem('vreki-look') || 'color') === 'color') document.documentElement.classList.add('look-color'); } catch (e) { document.documentElement.classList.add('look-color'); }
+</script>
+</head>
+<body class="day">
+<!-- screentones for the inked characters (app.css: .avatar .cl / .hat) -->
+<svg class="defs" width="0" height="0" aria-hidden="true">
+  <defs>
+    <pattern id="toneL" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#fff"/><circle cx="4" cy="4" r="1.3" fill="#111"/></pattern>
+    <pattern id="toneM" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#fff"/><circle cx="4" cy="4" r="2.3" fill="#111"/></pattern>
+  </defs>
+</svg>
+
+<!-- ===== Lobby ===== -->
+<div id="lobby">
+  <div class="lobby-inner">
+    <h1>หมู่บ้านหมาป่า</h1>
+    <p class="sub">ผู้เล่น 6 คน · หมาป่า 2 · หมอดู 1 · หมอ 1 · ชาวบ้าน 2 · ใครโกหกเก่งที่สุด</p>
+    <div id="lobbyCast" class="cast"></div>
+    <div id="runningBox" class="running" hidden>
+      <span>มีเกมกำลังเล่นอยู่</span>
+      <button class="btn" data-act="watch-audience">ดูต่อ · มุมมองคนดู</button>
+      <button class="btn" data-act="watch-god">ดูต่อ · มุมมองพระเจ้า</button>
+      <button class="btn" data-act="watch-player">ดูต่อ · มุมมองผู้เล่น</button>
+    </div>
+    <div id="setupStrip" class="setup-strip">
+      <span id="stripSeats">กำลังเช็คค่าย AI…</span>
+      <span id="stripVoice"></span>
+      <button class="link" data-act="open-setup">ตั้งค่า AI และเสียง</button>
+    </div>
+    <div class="actions">
+      <button class="btn primary" data-act="start-audience">เกม AI ล้วน · คนดูเดา<small>ซ่อนบททุกคน เฉลยตอนจบ</small></button>
+      <button class="btn" data-act="start-god">เกม AI ล้วน · มุมมองพระเจ้า<small>เห็นบท ความคิดในใจ และคืนลับ</small></button>
+      <button class="btn primary" data-act="pick-seat">ฉันเล่นด้วย<small>มุมมองผู้เล่น · ซ่อนบทคนอื่น</small></button>
+    </div>
+    <label class="check show-co"><input type="checkbox" id="showCompanies"> โชว์ค่าย AI ตั้งแต่เริ่ม <small>(เกม AI ล้วน)</small></label>
+    <p id="pickHint" class="hint" hidden>คลิกตัวละครที่จะเล่นแทน</p>
+    <p id="startError" class="start-error" hidden></p>
+    <div class="lobby-foot">
+      <label class="check"><input type="checkbox" id="mockToggle"> โหมดทดสอบ (ไม่เรียก AI)</label>
+      <button class="link" data-act="history">ดูเกมย้อนหลัง</button>
+      <label class="check"><input type="checkbox" id="replayAudience"> ย้อนหลังแบบคนดู</label>
+      <span class="look-switch">หน้าตา <button data-look="ink">ขาวดำ</button><button data-look="color">สี</button></span>
+      <button class="link" data-act="shutdown">ปิดเกม</button>
+    </div>
+    <div id="historyBox" class="history" hidden></div>
+    <p class="keys">ปุ่มลัดในห้อง: F เต็มจอ · Space หยุด/เล่นต่อ · [ ] ช้าลง/เร็วขึ้น · H ซ่อนบันทึก · M ปิด/เปิดเสียง · R เฉลยค่าย (ตอนจบ) · C สลับขาวดำ/สี</p>
+  </div>
+</div>
+
+<!-- ===== Setup (centred card on a dimmed page) ===== -->
+<div id="setup" class="modal" hidden>
+  <div class="modal-card setup-card" role="dialog" aria-labelledby="setupTitle">
+    <h2 id="setupTitle">ตั้งค่า AI และเสียง</h2>
+    <p class="setup-note">เลือกค่าย AI ที่จะให้เล่น · เลือกค่ายเดียว สองค่าย หรือครบสามค่ายก็ได้ · ที่นั่ง 6 ที่แบ่งให้เท่าๆ กัน</p>
+    <div id="provRows" class="prov-rows"></div>
+    <p id="seatLine" class="seat-line"></p>
+    <p class="quota-note">1 เกมเรียก AI ราว 30–45 ครั้ง (ค่าประมาณ) · แพ็ก 20 ดอลลาร์อาจเล่นได้ไม่กี่เกมต่อ 5 ชั่วโมง · กด "ทดสอบ" = ใช้โควต้า 1 ครั้ง</p>
+    <div class="voice-row">
+      <b>เสียงพากย์</b>
+      <label class="check"><input type="radio" name="voice" value="off"> ปิดเสียง</label>
+      <label class="check"><input type="radio" name="voice" value="free"> เสียงฟรี</label>
+      <label class="check"><input type="radio" name="voice" value="gemini"> เสียง Gemini</label>
+    </div>
+    <p id="voiceNote" class="voice-note"></p>
+    <div class="setup-actions">
+      <button class="link" data-act="recheck">เช็คโปรแกรมใหม่</button>
+      <button class="btn primary" data-act="close-setup">เสร็จแล้ว</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Confirm card ===== -->
+<div id="confirmBox" class="modal" hidden>
+  <div class="modal-card" role="dialog">
+    <p id="confirmText"></p>
+    <div class="setup-actions">
+      <button class="btn" data-confirm="no">ยกเลิก</button>
+      <button class="btn primary" data-confirm="yes">ตกลง</button>
+    </div>
+  </div>
+</div>
+
+<div id="closedNote" class="modal" hidden><div class="modal-card"><p>ปิดเกมแล้ว · ปิดแท็บนี้ได้เลย</p></div></div>
+
+<!-- ===== Room ===== -->
+<div id="room" hidden>
+  <header id="topbar">
+    <div class="phase"><span id="phaseIcon" class="icon"></span><span id="phaseText">เตรียมเกม</span><span id="roundText"></span></div>
+    <div id="narration" class="narration"></div>
+    <div id="viewMode" class="viewmode"></div>
+  </header>
+  <main id="stage">
+    <section id="table">
+      <div class="row top" id="rowTop"></div>
+      <div class="center" id="center"></div>
+      <div class="row bottom" id="rowBottom"></div>
+      <div id="bubbles"></div>
+      <div id="endBanner" hidden>
+        <div class="winner" id="winnerText"></div>
+        <div class="end-sub" id="endSub"></div>
+        <div id="companySummary" class="company-summary"></div>
+        <div class="end-actions">
+          <button class="btn" id="revealBtn">เฉลยค่าย AI <kbd>R</kbd></button>
+          <button class="btn ghost" id="lobbyBtn">หน้าแรก</button>
+        </div>
+      </div>
+    </section>
+    <aside id="log"><div class="log-title">บันทึกเหตุการณ์</div><ol id="logList"></ol></aside>
+  </main>
+
+  <div id="humanDock" hidden>
+    <div class="dock-head"><span id="dockPrompt"></span><span id="dockHint"></span></div>
+    <div id="dockOptions" class="dock-options"></div>
+    <div class="dock-row">
+      <textarea id="dockText" rows="2" placeholder="พิมพ์ภาษาไทยได้เลย · Enter = ส่ง · Shift+Enter = ขึ้นบรรทัด"></textarea>
+      <button class="btn primary" id="dockSend">ส่ง</button>
+    </div>
+    <div id="dockError" class="dock-error"></div>
+  </div>
+  <div id="announce" hidden><div class="a-box"><div class="a-title"></div><div class="a-sub"></div></div></div>
+  <div id="toast"></div>
+</div>
+
+<script src="avatars.js"></script>
+<script src="app.js"></script>
+<script src="setup.js"></script>
+</body>
+</html>

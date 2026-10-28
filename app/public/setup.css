@@ -1,0 +1,63 @@
+/* setup.css — lobby strip, the "ตั้งค่า AI และเสียง" card and the confirm card.
+   Same ink-on-paper look as app.css: square corners, double ink border, one spot red. */
+
+/* ---------- strip above the start buttons ---------- */
+.setup-strip { display: flex; justify-content: center; align-items: baseline; gap: 1.6vw; margin: -.6vh 0 2vh; color: #CFCAC0; font: 600 1.8vh 'Mali', sans-serif; }
+.setup-strip .warn { color: #fff; background: var(--red); padding: .1vh .8vh .3vh; }
+.show-co { margin-top: 1.4vh; color: #CFCAC0; font: 600 1.7vh 'Mali', sans-serif; }
+.show-co small { opacity: .7; font-weight: 500; }
+.start-error { margin: 1.2vh auto 0; max-width: 70vw; color: #fff; background: var(--red); padding: .6vh 1.4vh .8vh; font: 600 1.8vh 'Mali', sans-serif; display: inline-block; }
+
+/* ---------- modal: centred card on a dimmed page ---------- */
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: rgba(0, 0, 0, .72); }
+.modal-card {
+  background: var(--paper); color: var(--ink); border: .35vh solid var(--ink); outline: .35vh solid var(--paper);
+  padding: 2.2vh 2.4vh; max-width: min(560px, 92vw); font: 600 1.9vh/1.5 'Mali', sans-serif; text-align: left;
+}
+.modal-card p { margin: 0 0 1.6vh; }
+.setup-actions { display: flex; justify-content: flex-end; align-items: center; gap: 1.2vw; margin-top: 1.4vh; }
+.modal-card .btn { font-size: 1.8vh; padding: .7vh 1.4vw; }
+.modal-card .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); outline: none; }
+.modal-card .link { color: var(--ink); }
+
+/* ---------- setup card ---------- */
+.setup-card { width: min(980px, 94vw); max-width: none; max-height: 92vh; overflow: auto; }
+.setup-card h2 { margin: 0 0 .6vh; font: italic 900 3.6vh/1.1 'Kanit', sans-serif; transform: rotate(-1deg); }
+.setup-note, .quota-note, .seat-line, .voice-note { font: 500 1.6vh/1.45 'Sarabun', sans-serif; margin: 0 0 1.2vh; }
+.quota-note { color: #5B5750; }
+.seat-line { font: 700 1.9vh 'Mali', sans-serif; }
+.voice-note { color: #5B5750; }
+
+.prov-rows { display: grid; gap: 1vh; margin: 1.2vh 0; }
+.prov-row {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) auto minmax(0, 1fr) auto; gap: .6vh 1.2vw; align-items: center;
+  border: .3vh solid var(--ink); border-left: 1.1vh solid var(--cc); padding: 1vh 1.2vh; background: #fff;
+}
+.prov-row.off { background: #E6E2D9; }
+.prov-pick { gap: .8vw; }
+.prov-pick b { font: 800 2.2vh 'Kanit', sans-serif; }
+.prov-pick small { font: 500 1.45vh 'Sarabun', sans-serif; color: #5B5750; }
+.prov-row .check input { accent-color: var(--ink); }
+.chip { font: 700 1.45vh 'Mali', sans-serif; border: .22vh solid var(--ink); padding: 0 .8vh .2vh; white-space: nowrap; }
+.chip.good { background: var(--ink); color: #fff; }
+.chip.bad { background: var(--red); color: #fff; border-color: var(--red); }
+.model { display: flex; align-items: center; gap: .6vw; font: 600 1.5vh 'Mali', sans-serif; }
+.model input, .key-row input {
+  flex: 1; min-width: 0; font: 500 1.6vh 'Sarabun', monospace; color: var(--ink); background: var(--paper);
+  border: .22vh solid var(--ink); border-radius: 0; padding: .4vh .8vh;
+}
+.prov-msg { grid-column: 1 / -1; margin: 0; font: 500 1.55vh/1.4 'Sarabun', sans-serif; color: #33302B; min-height: 0; }
+.prov-msg:empty { display: none; }
+.prov-msg.bad { color: var(--red); font-weight: 700; }
+.key-row { grid-column: 1 / -1; display: flex; gap: 1vw; align-items: center; }
+
+.voice-row { display: flex; flex-wrap: wrap; gap: 1.6vw; align-items: center; margin: 1.4vh 0 .6vh; font: 600 1.8vh 'Mali', sans-serif; }
+.voice-row b { font: 800 2vh 'Kanit', sans-serif; }
+.voice-row input { accent-color: var(--ink); }
+.voice-row input:disabled + * , .voice-row label:has(input:disabled) { opacity: .45; }
+
+@media (max-width: 760px) {
+  .prov-row { grid-template-columns: 1fr auto; }
+  .model { grid-column: 1 / -1; }
+}
+.history button.clip { font-weight: 700; color: #FFD84A; }

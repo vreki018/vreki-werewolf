@@ -1,0 +1,118 @@
+{
+  "status": "Final 2026-10-18 (VreKi's review): all 6 = gemini, model gemini-3.8-flash-tts (Flash rated over Lite for ป้าแจ่ม; equal for ตี๋). Voices = review options ป้าแจ่ม O1, ลุงเพิ่ม O4, น้องฟ้า G3, ครูวิทย์ G4, เจ๊หมวย G5, ตี๋ G6. voice/rate/pitch = Edge fallback only.",
+  "engine": "edge-tts (Microsoft Edge neural voices, free, no key)",
+  "characters": {
+    "jaem": {
+      "name": "ป้าแจ่ม",
+      "engine": "gemini",
+      "gemini_voice": "Gacrux",
+      "style": "Thai market-stall woman in her early sixties with a clearly older voice: lower, slightly hoarse and rough from years of shouting at the market. Loud, fast, gossipy and hot-tempered, dramatic exclamations.",
+      "option": "O1",
+      "voice": "th-TH-PremwadeeNeural",
+      "rate": "+12%",
+      "pitch": "-10Hz"
+    },
+    "perm": {
+      "name": "ลุงเพิ่ม",
+      "engine": "gemini",
+      "gemini_voice": "Algenib",
+      "style": "Very old Thai rice farmer, about eighty. Aged, hoarse and a little breathy and shaky, the voice of a grandfather. Slow, calm and unhurried rural speech with small pauses, wise and steady.",
+      "option": "O4",
+      "voice": "th-TH-NiwatNeural",
+      "rate": "-18%",
+      "pitch": "-14Hz"
+    },
+    "fah": {
+      "name": "น้องฟ้า",
+      "engine": "gemini",
+      "gemini_voice": "Leda",
+      "style": "Thai high-school girl. Cheerful, quick and energetic, teen slang, a little dramatic, pointing fingers playfully.",
+      "option": "G3",
+      "voice": "th-TH-PremwadeeNeural",
+      "rate": "+12%",
+      "pitch": "+22Hz"
+    },
+    "wit": {
+      "name": "ครูวิทย์",
+      "engine": "gemini",
+      "gemini_voice": "Sadaltager",
+      "style": "Thai science teacher in his forties. Polite, measured and serious, logical, precise, like laying out evidence in class.",
+      "option": "G4",
+      "voice": "th-TH-NiwatNeural",
+      "rate": "+0%",
+      "pitch": "+0Hz"
+    },
+    "muay": {
+      "name": "เจ๊หมวย",
+      "engine": "gemini",
+      "gemini_voice": "Kore",
+      "style": "Thai grocery-shop owner woman in her forties. Sharp-tongued, sarcastic, suspicious and blunt, sassy eye-rolling tone.",
+      "option": "G5",
+      "voice": "th-TH-PremwadeeNeural",
+      "rate": "+4%",
+      "pitch": "-8Hz"
+    },
+    "tee": {
+      "name": "ตี๋",
+      "engine": "gemini",
+      "gemini_voice": "Puck",
+      "style": "Thai teenage gamer boy. Cheeky and teasing, short clipped sentences, casual, a bit lazy-sounding but sharp.",
+      "option": "G6",
+      "voice": "th-TH-NiwatNeural",
+      "rate": "+16%",
+      "pitch": "+18Hz"
+    }
+  },
+  "gemini": {
+    "models": [
+      "gemini-3.8-flash-tts",
+      "gemini-3.8-flash-lite-tts",
+      "gemini-2.5-flash-preview-tts",
+      "gemini-3.1-flash-tts-preview",
+      "gemini-2.5-pro-preview-tts"
+    ],
+    "models_note": "tried in this order; a model over its daily cap (429 'per day') is skipped until its reset. Probed 2026-10-18: all 5 work with this key; only the two 3.8 models accept the style annotation.",
+    "no_style_models": [
+      "gemini-2.5-flash-preview-tts",
+      "gemini-3.1-flash-tts-preview",
+      "gemini-2.5-pro-preview-tts"
+    ],
+    "daily_caps": {
+      "gemini-3.8-flash-tts": 100,
+      "gemini-3.8-flash-lite-tts": 100,
+      "gemini-2.5-flash-preview-tts": 100,
+      "gemini-3.1-flash-tts-preview": 100,
+      "gemini-2.5-pro-preview-tts": 50
+    },
+    "daily_caps_note": "requests per day per model, project 'Minecraft Project', Tier 1 - read by VreKi from aistudio.google.com/rate-limit on 2026-10-18 (screenshot). Every TTS model there: 10 RPM, 10K input TPM.",
+    "quota_reset_utc_hour": 0,
+    "timeout_base_sec": 30,
+    "timeout_per_char_sec": 0.08,
+    "timeout_cap_sec": 150,
+    "line_budget_sec": 145,
+    "lines_per_game_est": 35,
+    "prices_usd_per_m": {
+      "gemini-3.8-flash-tts": [
+        0.5,
+        9
+      ],
+      "gemini-3.8-flash-lite-tts": [
+        0.5,
+        6
+      ],
+      "gemini-2.5-flash-preview-tts": [
+        0.5,
+        10
+      ],
+      "gemini-3.1-flash-tts-preview": [
+        1,
+        20
+      ],
+      "gemini-2.5-pro-preview-tts": [
+        1,
+        20
+      ]
+    },
+    "prices_note": "USD per 1M tokens [input, audio output], paid tier, read 2026-10-18 from ai.google.dev/gemini-api/docs/pricing; doubles on 2027-01-01"
+  }
+}

@@ -1,0 +1,85 @@
+/* app-color.css — the colour version of the comic look (VreKi 2026-10-18: try a coloured version).
+   Every rule is scoped to html.look-color, so the black-and-white look in app.css stays untouched.
+   Switch: lobby "หน้าตา ขาวดำ / สี", key C in the room, or ?look=color / ?look=ink (remembered per browser profile).
+   Flat colour + ink lines only: no glow, light sweeps, haze or sparkles (feedback_no_ai_slop_visuals). */
+
+/* ---------- characters keep their own colours; ink outlines stay ---------- */
+html.look-color .avatar .o { stroke: var(--ink); stroke-width: 3.8; }
+
+/* ---------- panels: a tint of the character colour + a small scene ---------- */
+html.look-color .card, html.look-color .cast-item { background-color: color-mix(in srgb, var(--c) 24%, #FFF6E4); background-repeat: no-repeat; }
+html.look-color .card::before, html.look-color .cast-item::before {
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--c) 70%, #000) 1.15px, transparent 1.5px); opacity: .35;
+}
+html.look-color .card:nth-child(2)::before { background-image: repeating-linear-gradient(-30deg, color-mix(in srgb, var(--c) 65%, #000) 0 2px, transparent 2px 10px); }
+
+/* ป้าแจ่ม — market stall awning */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-jaem) {
+  background-color: #F9E2D8;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='64'><rect width='40' height='42' fill='%23D64545'/><rect x='40' width='40' height='42' fill='%23FFF1D6'/><path d='M0 40 A20 20 0 0 0 40 40 Z' fill='%23D64545'/><path d='M40 40 A20 20 0 0 0 80 40 Z' fill='%23FFF1D6'/><path d='M0 40 A20 20 0 0 0 40 40 A20 20 0 0 0 80 40' fill='none' stroke='%23111' stroke-width='4'/></svg>");
+  background-size: 7.4vh 5.9vh; background-position: 0 0; background-repeat: repeat-x;
+}
+/* ลุงเพิ่ม — rice field under a flat sun */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-perm) {
+  background-color: #CDE8F5;
+  background-image:
+    radial-gradient(circle at 84% 17%, #FFD24D 0 5.2vh, #111 5.2vh 5.55vh, transparent 5.6vh),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='30'><path d='M6 30 L10 6 M18 30 L18 2 M30 30 L26 6' stroke='%235E8A2E' stroke-width='3' stroke-linecap='round'/></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='30'><path d='M6 30 L10 6 M18 30 L18 2 M30 30 L26 6' stroke='%235E8A2E' stroke-width='3' stroke-linecap='round'/></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='30'><path d='M6 30 L10 6 M18 30 L18 2 M30 30 L26 6' stroke='%235E8A2E' stroke-width='3' stroke-linecap='round'/></svg>"),
+    linear-gradient(to bottom, transparent 0 52%, #111 52% calc(52% + 3px), #A9CC63 calc(52% + 3px) 100%);
+  background-size: auto, 3.4vh 2.8vh, 3.4vh 2.8vh, 3.4vh 2.8vh, auto;
+  background-position: 0 0, 0 60%, 1.7vh 74%, 0 88%, 0 0;
+  background-repeat: no-repeat, repeat-x, repeat-x, repeat-x, no-repeat;
+}
+/* น้องฟ้า — school corridor windows */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-fah) {
+  background-color: #FFEFC4;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='130' height='120'><rect x='14' y='6' width='100' height='104' fill='%23BFE3F5' stroke='%23111' stroke-width='5'/><path d='M64 6 V110 M14 58 H114' stroke='%23111' stroke-width='4'/></svg>");
+  background-size: 12vh 11vh; background-position: 0 4vh; background-repeat: repeat-x;
+}
+/* ครูวิทย์ — chalkboard */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-wit) {
+  background-color: #E7E0F4;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='120'><g fill='none' stroke='%23F4F1E6' stroke-width='3' stroke-linecap='round' opacity='.8'><path d='M10 96 Q60 70 110 92 T210 84'/><path d='M150 20 l30 0 M165 6 l0 28'/></g><text x='10' y='40' font-family='Arial' font-style='italic' font-size='34' fill='%23F4F1E6' opacity='.85'>E = mc²</text><text x='150' y='66' font-family='Arial' font-style='italic' font-size='24' fill='%23F4F1E6' opacity='.7'>F = ma</text></svg>"),
+    linear-gradient(#2F5A48, #2F5A48), linear-gradient(#111, #111), linear-gradient(#8B5A2B, #8B5A2B);
+  background-size: auto 22%, 90% 60%, calc(90% + 1.6vh) calc(60% + 1.6vh), calc(90% + 3vh) calc(60% + 3vh);
+  background-position: 18% 14%, 50% 8%, 50% calc(8% - .3vh), 50% calc(8% - .7vh);
+  background-repeat: no-repeat;
+}
+/* เจ๊หมวย — grocery shelves */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-muay) {
+  background-color: #F7DDB6;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='96'><g stroke='%23111' stroke-width='3'><rect x='10' y='38' width='30' height='46' fill='%23E2785A'/><rect x='50' y='52' width='22' height='32' rx='3' fill='%2357A9A0'/><path d='M84 84 V60 Q84 50 98 50 Q112 50 112 60 V84 Z' fill='%23EFC24F'/><rect x='122' y='30' width='16' height='54' rx='4' fill='%236C8ED0'/></g><rect y='84' width='150' height='12' fill='%238A5A2B' stroke='%23111' stroke-width='3'/></svg>");
+  background-size: 14vh 9vh; background-position: 0 1.5vh; background-repeat: repeat;
+}
+/* ตี๋ — game room with a pixel-heart HUD */
+html.look-color :is(.card, .cast-item):has(> .portrait > .av-tee) {
+  background-color: #D3EFE6;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='32' shape-rendering='crispEdges'><path d='M8 4h8v4h-8zM20 4h8v4h-8zM4 8h28v8h-28zM8 16h20v4h-20zM12 20h12v4h-12zM16 24h4v4h-4z' fill='%23E5484D'/></svg>"),
+    linear-gradient(#2B3A4A, #2B3A4A);
+  background-size: 4.4vh 3.5vh, 100% 6.6vh; background-position: calc(var(--slant) + 1vh) 1.6vh, 0 0; background-repeat: repeat-x, no-repeat;
+}
+
+/* night: the panel goes dark navy, the character stays readable */
+html.look-color body.night .card::before { background: #1B2350; opacity: .62; -webkit-mask-image: none; mask-image: none; }
+html.look-color body.night .card .portrait { filter: brightness(.88); }
+/* dead: grey wash over the scene, figure already greyed in app.css */
+html.look-color .card.dead::before { background: #6E6A66; opacity: .55; -webkit-mask-image: none; mask-image: none; }
+html.look-color .card.dead .portrait { filter: grayscale(1) contrast(.9); opacity: .75; }
+
+/* ---------- top bar caption ---------- */
+html.look-color #topbar .phase { background: #FFD84A; }
+html.look-color body.night #topbar .phase { background: #1E2A5A; color: #FFF6E4; border-color: #FFF6E4; outline-color: #1E2A5A; }
+
+/* ---------- centred announcement: one flat colour per cue ---------- */
+html.look-color #announce .a-box { background-color: #FFD84A; }
+html.look-color #announce.cue-night .a-box { background-color: #1E2A5A; color: #FFF6E4; }
+html.look-color #announce.cue-night .a-box > .speed { color: #4A5A9A; }
+html.look-color #announce.cue-vote .a-box { background-color: #F2A93B; }
+html.look-color #announce.cue-eliminate .a-box { background-color: #E5484D; color: #fff; }
+html.look-color #announce.cue-eliminate .a-box > .speed { color: #8E1E22; }
+html.look-color #announce.cue-tie .a-box { background-color: #BFC6CF; }
+html.look-color #announce.cue-reveal_good .a-box { background-color: #8FD3A8; }
+
+/* ---------- lobby title ---------- */
+html.look-color #lobby h1 { color: #FFD84A; }

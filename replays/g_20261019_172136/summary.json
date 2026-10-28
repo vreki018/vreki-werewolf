@@ -1,0 +1,248 @@
+{
+  "gameId": "g_20261019_172136",
+  "startedAt": "2026-10-19T10:21:36.121Z",
+  "durationSec": 235,
+  "winner": "village",
+  "humanSeat": null,
+  "mock": false,
+  "models": {
+    "claude": {
+      "company": "Anthropic",
+      "model": "claude-opus-5-5",
+      "effort": "medium"
+    },
+    "codex": {
+      "company": "OpenAI",
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "gemini": {
+      "company": "Google",
+      "model": "gemini-4-argon",
+      "effort": null
+    },
+    "agy": {
+      "company": "Google",
+      "model": "gemini-3.8-flash-high",
+      "effort": null
+    }
+  },
+  "seats": [
+    {
+      "seat": 0,
+      "id": "jaem",
+      "name": "ป้าแจ่ม",
+      "tag": "แม่ค้าตลาด",
+      "color": "#C2566B",
+      "role": "doctor",
+      "roleTh": "หมอ",
+      "provider": "codex",
+      "company": "OpenAI",
+      "label": "ChatGPT",
+      "model": "gpt-6.1-sol",
+      "modelLabel": "GPT-6.1 Sol",
+      "companyColor": "#10A37F",
+      "replacedProvider": null,
+      "alive": false
+    },
+    {
+      "seat": 1,
+      "id": "perm",
+      "name": "ลุงเพิ่ม",
+      "tag": "ชาวนา",
+      "color": "#8A9A5B",
+      "role": "seer",
+      "roleTh": "หมอดู",
+      "provider": "codex",
+      "company": "OpenAI",
+      "label": "ChatGPT",
+      "model": "gpt-6.1-sol",
+      "modelLabel": "GPT-6.1 Sol",
+      "companyColor": "#10A37F",
+      "replacedProvider": null,
+      "alive": true
+    },
+    {
+      "seat": 2,
+      "id": "muay",
+      "name": "เจ๊หมวย",
+      "tag": "เจ้าของร้านชำ",
+      "color": "#D08B3E",
+      "role": "villager",
+      "roleTh": "ชาวบ้าน",
+      "provider": "gemini",
+      "company": "Google",
+      "label": "Gemini",
+      "model": "gemini-4-argon",
+      "modelLabel": "4 Argon",
+      "companyColor": "#4285F4",
+      "replacedProvider": null,
+      "alive": true
+    },
+    {
+      "seat": 3,
+      "id": "fah",
+      "name": "น้องฟ้า",
+      "tag": "นักเรียน",
+      "color": "#4FA3D1",
+      "role": "wolf",
+      "roleTh": "หมาป่า",
+      "provider": "gemini",
+      "company": "Google",
+      "label": "Gemini",
+      "model": "gemini-4-argon",
+      "modelLabel": "4 Argon",
+      "companyColor": "#4285F4",
+      "replacedProvider": null,
+      "alive": false
+    },
+    {
+      "seat": 4,
+      "id": "tee",
+      "name": "ตี๋",
+      "tag": "เด็กติดเกม",
+      "color": "#3FA88B",
+      "role": "wolf",
+      "roleTh": "หมาป่า",
+      "provider": "claude",
+      "company": "Anthropic",
+      "label": "Claude",
+      "model": "claude-opus-5-5",
+      "modelLabel": "Opus 5.5",
+      "companyColor": "#D97757",
+      "replacedProvider": null,
+      "alive": false
+    },
+    {
+      "seat": 5,
+      "id": "wit",
+      "name": "ครูวิทย์",
+      "tag": "ครูวิทยาศาสตร์",
+      "color": "#7C6BC4",
+      "role": "villager",
+      "roleTh": "ชาวบ้าน",
+      "provider": "claude",
+      "company": "Anthropic",
+      "label": "Claude",
+      "model": "claude-opus-5-5",
+      "modelLabel": "Opus 5.5",
+      "companyColor": "#D97757",
+      "replacedProvider": null,
+      "alive": true
+    }
+  ],
+  "stats": {
+    "codex": {
+      "calls": 13,
+      "ok": 13,
+      "failed": 0,
+      "retries": 0,
+      "totalMs": 97280,
+      "maxMs": 11462,
+      "input": 233987,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "output": 1138,
+      "reasoning": 152,
+      "costUsd": 0,
+      "promptChars": 35789,
+      "avgMs": 7483,
+      "avgInput": 17999
+    },
+    "gemini": {
+      "calls": 14,
+      "ok": 14,
+      "failed": 0,
+      "retries": 0,
+      "totalMs": 115621,
+      "maxMs": 14828,
+      "input": 23919,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "output": 1648,
+      "reasoning": 0,
+      "costUsd": 0.064318,
+      "promptChars": 47898,
+      "avgMs": 8259,
+      "avgInput": 1709
+    },
+    "claude": {
+      "calls": 10,
+      "ok": 10,
+      "failed": 0,
+      "retries": 0,
+      "totalMs": 83622,
+      "maxMs": 14500,
+      "input": 20,
+      "cacheRead": 4349,
+      "cacheWrite": 39729,
+      "output": 4244,
+      "reasoning": 0,
+      "costUsd": 0.4036618,
+      "promptChars": 31381,
+      "avgMs": 8362,
+      "avgInput": 2
+    }
+  },
+  "codexRateLimits": {
+    "first": {
+      "primary": 0,
+      "primaryWindowMin": 300,
+      "secondary": 8,
+      "secondaryWindowMin": 10080
+    },
+    "last": {
+      "primary": 6,
+      "primaryWindowMin": 300,
+      "secondary": 9,
+      "secondaryWindowMin": 10080
+    }
+  },
+  "voice": {
+    "lines": 22,
+    "ok": 22,
+    "failed": 0,
+    "totalMs": 196415,
+    "maxMs": 10092,
+    "audioSec": 306.56,
+    "byChar": {
+      "jaem": {
+        "lines": 2,
+        "ok": 2,
+        "totalMs": 15367,
+        "maxMs": 7850
+      },
+      "perm": {
+        "lines": 4,
+        "ok": 4,
+        "totalMs": 36474,
+        "maxMs": 9528
+      },
+      "muay": {
+        "lines": 4,
+        "ok": 4,
+        "totalMs": 36761,
+        "maxMs": 9631
+      },
+      "fah": {
+        "lines": 5,
+        "ok": 5,
+        "totalMs": 43422,
+        "maxMs": 9689
+      },
+      "tee": {
+        "lines": 3,
+        "ok": 3,
+        "totalMs": 25976,
+        "maxMs": 9618
+      },
+      "wit": {
+        "lines": 4,
+        "ok": 4,
+        "totalMs": 38415,
+        "maxMs": 10092
+      }
+    }
+  },
+  "days": 2
+}

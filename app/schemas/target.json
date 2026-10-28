@@ -1,0 +1,1 @@
+{"type":"object","properties":{"aside":{"type":"string"},"target":{"type":"string"}},"required":["aside","target"],"additionalProperties":false}

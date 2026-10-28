@@ -1,0 +1,185 @@
+{"type":"game_init","vis":"all","gameId":"g_20261019_172136","humanSeat":null,"seats":[{"seat":0,"id":"jaem","name":"ป้าแจ่ม","tag":"แม่ค้าตลาด","color":"#C2566B"},{"seat":1,"id":"perm","name":"ลุงเพิ่ม","tag":"ชาวนา","color":"#8A9A5B"},{"seat":2,"id":"muay","name":"เจ๊หมวย","tag":"เจ้าของร้านชำ","color":"#D08B3E"},{"seat":3,"id":"fah","name":"น้องฟ้า","tag":"นักเรียน","color":"#4FA3D1"},{"seat":4,"id":"tee","name":"ตี๋","tag":"เด็กติดเกม","color":"#3FA88B"},{"seat":5,"id":"wit","name":"ครูวิทย์","tag":"ครูวิทยาศาสตร์","color":"#7C6BC4"}],"seq":1,"t":301}
+{"type":"role","vis":{"seats":[0]},"seat":0,"role":"doctor","roleTh":"หมอ","partners":[],"seq":2,"t":301}
+{"type":"role","vis":{"seats":[1]},"seat":1,"role":"seer","roleTh":"หมอดู","partners":[],"seq":3,"t":302}
+{"type":"role","vis":{"seats":[2]},"seat":2,"role":"villager","roleTh":"ชาวบ้าน","partners":[],"seq":4,"t":302}
+{"type":"role","vis":{"seats":[3]},"seat":3,"role":"wolf","roleTh":"หมาป่า","partners":["ตี๋"],"seq":5,"t":302}
+{"type":"role","vis":{"seats":[4]},"seat":4,"role":"wolf","roleTh":"หมาป่า","partners":["น้องฟ้า"],"seq":6,"t":302}
+{"type":"role","vis":{"seats":[5]},"seat":5,"role":"villager","roleTh":"ชาวบ้าน","partners":[],"seq":7,"t":302}
+{"type":"narrate","vis":"all","text":"ยินดีต้อนรับสู่หมู่บ้าน มีหมาป่าแฝงตัวอยู่ 2 ตัว ใครโกหกเก่งที่สุดจะรอด","big":true,"title":"หมู่บ้านหมาป่า","sub":"มีหมาป่าแฝงตัวอยู่ 2 ตัว ใครโกหกเก่งที่สุดจะรอด","cue":"start","seq":8,"t":302}
+{"type":"phase","vis":"all","phase":"night","n":1,"seq":9,"t":302}
+{"type":"narrate","vis":"all","text":"คืนที่ 1 มาถึงแล้ว ทุกคนหลับตา…","big":true,"title":"คืนที่ 1","sub":"ทุกคนหลับตา… หมาป่าออกล่า","cue":"night","seq":10,"t":303}
+{"type":"thinking","vis":{"seats":[1]},"seat":1,"kind":"target","seq":11,"t":303}
+{"type":"thinking","vis":{"seats":[0]},"seat":0,"kind":"target","seq":12,"t":318}
+{"type":"thinking_off","vis":{"seats":[1]},"seat":1,"seq":13,"t":10973}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"target","text":"น้ำลึกหยั่งได้ น้ำใจหยั่งยาก ลุงขอส่องครูวิทย์ดูก่อนละกัน","seq":14,"t":10974}
+{"type":"night_action","vis":{"seats":[1]},"seat":1,"action":"see","target":5,"targetName":"ครูวิทย์","result":"notwolf","seq":15,"t":10974}
+{"type":"thinking_off","vis":{"seats":[0]},"seat":0,"seq":16,"t":11781}
+{"type":"thought","vis":{"seats":[]},"seat":0,"kind":"target","text":"ป้าขอปกป้องตัวเองก่อน ยังต้องอยู่จับพิรุธพวกนี้อีกยาว","seq":17,"t":11781}
+{"type":"night_action","vis":{"seats":[0]},"seat":0,"action":"protect","target":0,"targetName":"ป้าแจ่ม","seq":18,"t":11781}
+{"type":"dawn","vis":"all","n":1,"seq":19,"t":11781}
+{"type":"phase","vis":"all","phase":"day","n":1,"seq":20,"t":11781}
+{"type":"narrate","vis":"all","text":"เช้าวันที่ 1 … เมื่อคืนเงียบสงบ","big":true,"title":"เช้าวันที่ 1","sub":"เมื่อคืนเงียบสงบ","cue":"morning","seq":21,"t":11781}
+{"type":"round","vis":"all","n":1,"r":1,"rounds":2,"seq":22,"t":11782}
+{"type":"thinking","vis":"all","seat":0,"kind":"speak","seq":23,"t":11782}
+{"type":"thinking_off","vis":"all","seat":0,"seq":24,"t":20130}
+{"type":"thought","vis":{"seats":[]},"seat":0,"kind":"speak","text":"ป้าต้องเก็บบทหมอไว้ก่อน ยังไม่รู้ว่าใครเป็นพวกไหน","seq":25,"t":20131}
+{"type":"speech","vis":"all","seat":0,"kind":"speak","text":"เมื่อคืนเงียบก็อย่าเพิ่งวางใจกันนะ ป้าขอฟังทุกคนก่อน ลุงเพิ่มเริ่มเลย ลุงสงสัยใคร เพราะอะไร","n":1,"r":1,"audio":"/audio/g_20261019_172136/1_jaem.mp3","audioSec":8.08,"seq":26,"t":27648}
+{"type":"thinking","vis":"all","seat":1,"kind":"speak","seq":27,"t":27648}
+{"type":"thinking_off","vis":"all","seat":1,"seq":28,"t":31495}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"speak","text":"ครูวิทย์ไม่ใช่หมาป่า ส่วนป้าแจ่มที่รีบให้ลุงชี้คนก็น่าจับตาไว้ก่อน","seq":29,"t":31495}
+{"type":"speech","vis":"all","seat":1,"kind":"speak","text":"ช้าๆ ได้พร้าเล่มงามนะแจ่ม ลุงยังไม่สงสัยใครชัดๆ ขอฟังทุกคนก่อน จะกล่าวหาใครก็ต้องมีเหตุให้หนักแน่น","n":1,"r":1,"audio":"/audio/g_20261019_172136/2_perm.mp3","audioSec":13.8,"seq":30,"t":40556}
+{"type":"thinking","vis":"all","seat":2,"kind":"speak","seq":31,"t":40556}
+{"type":"thinking_off","vis":"all","seat":2,"seq":32,"t":40556}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"speak","text":"อีลุงเพิ่มทำมาเป็นพูดหล่อ ระวังตัวไว้เถอะแก๊","seq":33,"t":40556}
+{"type":"speech","vis":"all","seat":2,"kind":"speak","text":"แหม ลุงเพิ่ม พูดจาดูดีเป็นพระเอกเชียว ระวังเถอะพวกนิ่งๆ นี่แหละตัวดี เจ๊ไม่ไว้ใจลุงคนแรกเลย ส่วนพวกที่เหลือ เงียบกันจังนะยะ รอให้หมาป่ามางาบก่อนรึไง คายพิรุธออกมาเดี๋ยวนี้!","n":1,"r":1,"audio":"/audio/g_20261019_172136/3_muay.mp3","audioSec":15.56,"seq":34,"t":48719}
+{"type":"thinking","vis":"all","seat":3,"kind":"speak","seq":35,"t":48719}
+{"type":"thinking_off","vis":"all","seat":3,"seq":36,"t":48719}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"speak","text":"เปิดมาก็ฟาดกันเลยแฮะ โยนให้เจ๊หมวยที่ออกตัวแรงก่อนเลยดีกว่า ตี๋จะได้รอดตัวไป","seq":37,"t":48719}
+{"type":"speech","vis":"all","seat":3,"kind":"speak","text":"โห เจ๊หมวยออกตัวแรงมากอ่ะ ร้อนตัวป่ะเนี่ย! คนที่รีบชี้คนอื่นตั้งแต่วันแรกแบบเจ๊นี่แหละน่าสงสัยสุด หนูว่าเจ๊หมวยมีพิรุธสุดละ!","n":1,"r":1,"audio":"/audio/g_20261019_172136/4_fah.mp3","audioSec":10.96,"seq":38,"t":56454}
+{"type":"thinking","vis":"all","seat":4,"kind":"speak","seq":39,"t":56454}
+{"type":"thinking_off","vis":"all","seat":4,"seq":40,"t":56987}
+{"type":"thought","vis":{"seats":[]},"seat":4,"kind":"speak","text":"ฟ้าเปิดเกมแรงไปหน่อย ผมห้ามเออออตามมาก เดี๋ยวคนจับได้ว่าเป็นคู่กัน","seq":41,"t":56987}
+{"type":"speech","vis":"all","seat":4,"kind":"speak","text":"ใจเย็นดิทุกคน วันแรกยังไม่มีอะไรเลย เถียงกันไปก็เท่านั้น ผมว่าคนที่น่าดูคือครูวิทย์มากกว่า ยังไม่พูดสักแอะเลยครับครู","n":1,"r":1,"audio":"/audio/g_20261019_172136/5_tee.mp3","audioSec":9.72,"seq":42,"t":65048}
+{"type":"thinking","vis":"all","seat":5,"kind":"speak","seq":43,"t":65048}
+{"type":"thinking_off","vis":"all","seat":5,"seq":44,"t":65048}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"speak","text":"ตี๋ไม่ยอมฟังใครเลย แต่หันมาชี้ครูคนเดียวทั้งที่ยังไม่ถึงตาครูพูด แบบนี้มันแปลกๆ นะ","seq":45,"t":65048}
+{"type":"speech","vis":"all","seat":5,"kind":"speak","text":"ตี๋ ครูยังไม่พูดเพราะยังไม่ถึงตาครูไงครับ ที่แปลกคือเธอบอกให้ใจเย็นๆ ก่อน แต่ประโยคถัดมาก็ชี้ตัวคนที่ยังไม่ได้พูดเลยสักคำ ครูขอจับตาดูเธอกับเจ๊หมวยไว้ก่อนนะครับ","n":1,"r":1,"audio":"/audio/g_20261019_172136/6_wit.mp3","audioSec":13.92,"seq":46,"t":71939}
+{"type":"round","vis":"all","n":1,"r":2,"rounds":2,"seq":47,"t":71939}
+{"type":"thinking","vis":"all","seat":0,"kind":"speak","seq":48,"t":71939}
+{"type":"thinking_off","vis":"all","seat":0,"seq":49,"t":71939}
+{"type":"thought","vis":{"seats":[]},"seat":0,"kind":"speak","text":"ป้าเก็บเรื่องเป็นหมอไว้ก่อน ตี๋นี่ต้องฟังให้ดี","seq":50,"t":71940}
+{"type":"speech","vis":"all","seat":0,"kind":"speak","text":"เอ้า ตี๋! ป้าเห็นนะว่าบอกให้ใจเย็นแล้วหันไปจี้ครู ทั้งที่ยังไม่ถึงตาเขา พอครูทักแบบนี้จะว่ายังไง มีเหตุอื่นให้สงสัยครูไหมล่ะ","n":1,"r":2,"audio":"/audio/g_20261019_172136/7_jaem.mp3","audioSec":11,"seq":51,"t":77971}
+{"type":"thinking","vis":"all","seat":1,"kind":"speak","seq":52,"t":77972}
+{"type":"thinking_off","vis":"all","seat":1,"seq":53,"t":77972}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"speak","text":"ลุงส่องแล้วว่าครูไม่ใช่หมาป่า แต่ตี๋อาจแค่พูดพลาด ต้องฟังเหตุผลก่อน","seq":54,"t":77972}
+{"type":"speech","vis":"all","seat":1,"kind":"speak","text":"ตี๋เอ๊ย ช้าๆ ได้พร้าเล่มงาม ครูยังไม่ถึงตาพูด จะถือว่าเงียบผิดสังเกตก็เร็วไปหน่อย ลุงขอฟังว่ามีเหตุอื่นไหม","n":1,"r":2,"audio":"/audio/g_20261019_172136/8_perm.mp3","audioSec":14.96,"seq":55,"t":87088}
+{"type":"thinking","vis":"all","seat":2,"kind":"speak","seq":56,"t":87088}
+{"type":"thinking_off","vis":"all","seat":2,"seq":57,"t":87088}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"speak","text":"ยัยน้องฟ้ากล้าชี้หน้าเจ๊ แถมไอ้ตี๋ก็ล่กโยนให้ครูวิทย์แบบมั่วๆ หรือสองคนนี้จะเป็นหมาด้วยกันนะ","seq":58,"t":87088}
+{"type":"speech","vis":"all","seat":2,"kind":"speak","text":"แหม น้องฟ้า พอเจ๊แหย่หน่อยก็รีบโบ้ยว่าเจ๊ร้อนตัวเลยนะยะ! แล้วดูไอ้ตี๋สิ บอกให้ใจเย็นแต่ตัวเองรีบโยนขี้ให้ครูวิทย์เฉย ล่กคู่เลยนะพวกแก สงสัยจะเป็นหมาด้วยกันล่ะสิท่า!","n":1,"r":2,"audio":"/audio/g_20261019_172136/9_muay.mp3","audioSec":14.32,"seq":59,"t":95031}
+{"type":"thinking","vis":"all","seat":3,"kind":"speak","seq":60,"t":95031}
+{"type":"thinking_off","vis":"all","seat":3,"seq":61,"t":95031}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"speak","text":"ยัยเจ๊หมวยดันทายถูกว่าหนูกับพี่ตี๋เป็นหมาคู่กัน ต้องรีบชิ่งด่าพี่ตี๋กลบเกลื่อนแล้ว!","seq":62,"t":95031}
+{"type":"speech","vis":"all","seat":3,"kind":"speak","text":"มั่วแล้วเจ๊หมวย! หนูไม่ได้พวกเดียวกับพี่ตี๋สักหน่อย พี่ตี๋อ่ะแหละพูดจาแปลกๆ อยู่ดีๆ ไปโบ้ยครูวิทย์เฉย ส่วนเจ๊ก็โวยวายกลบเกลื่อนเก่ง ไม่เจ๊หมวยก็พี่ตี๋นี่แหละหมาชัวร์!","n":1,"r":2,"audio":"/audio/g_20261019_172136/10_fah.mp3","audioSec":14,"seq":63,"t":100918}
+{"type":"thinking","vis":"all","seat":4,"kind":"speak","seq":64,"t":100918}
+{"type":"thinking_off","vis":"all","seat":4,"seq":65,"t":100919}
+{"type":"thought","vis":{"seats":[]},"seat":4,"kind":"speak","text":"ดีที่ฟ้าแกล้งเหยียบผมไว้ คนอื่นจะได้ไม่จับเราเป็นคู่กัน ตอนนี้ต้องโยนเป้าไปที่เจ๊หมวย","seq":66,"t":100919}
+{"type":"speech","vis":"all","seat":4,"kind":"speak","text":"โอเค ผมแซวครูไวไปเองแหละ ขอโทษครับครู แต่เจ๊หมวยนี่แหละ ชี้ลุงทีนึง ชี้ผมกับฟ้าอีกที กวาดไปทั่วเลย ระวังเหอะ ชี้คนเยอะขนาดนี้ยังไงก็ต้องโดนสักตัว","n":1,"r":2,"audio":"/audio/g_20261019_172136/11_tee.mp3","audioSec":15.2,"seq":67,"t":109080}
+{"type":"thinking","vis":"all","seat":5,"kind":"speak","seq":68,"t":109080}
+{"type":"thinking_off","vis":"all","seat":5,"seq":69,"t":109080}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"speak","text":"ตี๋ยอมขอโทษเร็ว แล้วก็หันไปชี้เจ๊หมวยทันที เหมือนอยากหาเป้าใหม่ไว้กลบตัวเอง","seq":70,"t":109080}
+{"type":"speech","vis":"all","seat":5,"kind":"speak","text":"ครูรับคำขอโทษนะตี๋ แต่สังเกตไหมครับ พอโดนทักปุ๊บ เธอก็ย้ายเป้าไปที่เจ๊หมวยทันที เจ๊หมวยเสียงดังก็จริง แต่เจ๊ชี้คนตรงๆ ส่วนตี๋ชี้แล้วก็ถอยแล้วก็ชี้ใหม่ ครูยังเอียงไปทางตี๋อยู่ครับ","n":1,"r":2,"audio":"/audio/g_20261019_172136/12_wit.mp3","audioSec":17.88,"seq":71,"t":115457}
+{"type":"vote_start","vis":"all","n":1,"seq":72,"t":115457}
+{"type":"narrate","vis":"all","text":"ถึงเวลาโหวต! ชี้ตัวคนที่คิดว่าเป็นหมาป่า","big":true,"title":"ถึงเวลาโหวต!","sub":"ชี้ตัวคนที่คิดว่าเป็นหมาป่า","cue":"vote","seq":73,"t":115457}
+{"type":"thinking","vis":"all","seat":0,"kind":"target","seq":74,"t":115458}
+{"type":"thinking","vis":"all","seat":1,"kind":"target","seq":75,"t":115458}
+{"type":"thinking","vis":"all","seat":2,"kind":"target","seq":76,"t":115458}
+{"type":"thinking","vis":"all","seat":3,"kind":"target","seq":77,"t":115458}
+{"type":"thinking","vis":"all","seat":4,"kind":"target","seq":78,"t":115458}
+{"type":"thinking","vis":"all","seat":5,"kind":"target","seq":79,"t":115458}
+{"type":"thinking_off","vis":"all","seat":5,"seq":80,"t":115458}
+{"type":"thinking_off","vis":"all","seat":2,"seq":81,"t":115458}
+{"type":"thinking_off","vis":"all","seat":1,"seq":82,"t":115458}
+{"type":"thinking_off","vis":"all","seat":0,"seq":83,"t":115458}
+{"type":"thinking_off","vis":"all","seat":4,"seq":84,"t":115459}
+{"type":"thinking_off","vis":"all","seat":3,"seq":85,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":0,"kind":"vote","text":"ป้าว่าตี๋อ้างครูเงียบทั้งที่ยังไม่ถึงตา พอโดนจี้ก็หันไปหาเจ๊หมวย ดูแก้ตัวเอารอดไปหน่อย","seq":86,"t":115459}
+{"type":"vote","vis":"all","seat":0,"target":4,"targetName":"ตี๋","seq":87,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"vote","text":"ลุงรู้ว่าครูไม่ใช่หมาป่า ตี๋จี้ครูโดยไม่มีเหตุแล้วเปลี่ยนเป้า ลุงเลยเอียงมาทางตี๋ที่สุด","seq":88,"t":115459}
+{"type":"vote","vis":"all","seat":1,"target":4,"targetName":"ตี๋","seq":89,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"vote","text":"ไอ้ตี๋นี่แหละล่กสุด โบ้ยครูวิทย์ไม่สำเร็จก็หันมากัดเจ๊แทน พิรุธแรงขนาดนี้เจ๊ไม่ปล่อยไว้หรอกย่ะ!","seq":90,"t":115459}
+{"type":"vote","vis":"all","seat":2,"target":4,"targetName":"ตี๋","seq":91,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"vote","text":"พี่ตี๋พลาดท่าโดนรุมเละเลย หนูต้องโหวตเจ๊หมวยตามที่พูดไว้เพื่อตัดเสียงช่วยพี่ตี๋ เผื่อคะแนนเสมอจะได้รอด!","seq":92,"t":115459}
+{"type":"vote","vis":"all","seat":3,"target":2,"targetName":"เจ๊หมวย","seq":93,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":4,"kind":"vote","text":"เจ๊แกชี้มั่วไปทั่วแถมจะลากผมกับฟ้าเข้าไปด้วย ต้องเอาออกก่อนเลย คนเริ่มฟังแกแล้ว","seq":94,"t":115459}
+{"type":"vote","vis":"all","seat":4,"target":2,"targetName":"เจ๊หมวย","seq":95,"t":115459}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"vote","text":"ตี๋บอกให้ใจเย็นแต่หันมาชี้ครูทันที พอโดนจับได้ก็ขอโทษแล้วย้ายไปชี้เจ๊หมวยต่อ คำพูดไม่คงเส้นคงวาแบบนี้ ครูขอโหวตตี๋ก่อนเลยครับ","seq":96,"t":115459}
+{"type":"vote","vis":"all","seat":5,"target":4,"targetName":"ตี๋","seq":97,"t":115460}
+{"type":"vote_result","vis":"all","n":1,"tally":{"2":2,"4":4},"eliminated":4,"seq":98,"t":115460}
+{"type":"narrate","vis":"all","text":"ตี๋ ถูกโหวตออกด้วย 4 เสียง ขอคำสั่งเสียหน่อย","big":true,"title":"ตี๋ ถูกโหวตออก","sub":"4 เสียง · ขอคำสั่งเสียหน่อย","cue":"eliminate","seq":99,"t":115460}
+{"type":"thinking","vis":"all","seat":4,"kind":"last","seq":100,"t":115460}
+{"type":"thinking_off","vis":"all","seat":4,"seq":101,"t":126771}
+{"type":"thought","vis":{"seats":[]},"seat":4,"kind":"last","text":"ยังไงบทก็เปิดอยู่แล้ว งั้นโยนความสงสัยไปที่ครู ให้คนเลิกมองฟ้าที่โหวตเจ๊หมวยเหมือนผม","seq":102,"t":126771}
+{"type":"speech","vis":"all","seat":4,"kind":"last","text":"เออ ผมเองแหละ ยินดีด้วยที่จับได้ แต่อีกตัวเล่นเนียนกว่าผมเยอะนะ ขนาดยอมขายเพื่อนตัวเองเพื่อเอาหน้าเลย... ขอบคุณที่ช่วยนะครับครูวิทย์ 😏","n":1,"audio":"/audio/g_20261019_172136/13_tee.mp3","audioSec":11.92,"seq":103,"t":135071}
+{"type":"death","vis":"all","seat":4,"cause":"vote","role":"wolf","roleTh":"หมาป่า","seq":104,"t":135071}
+{"type":"narrate","vis":"all","text":"ตี๋ เป็น… หมาป่า!","big":true,"title":"ตี๋ เป็น…","sub":"หมาป่า!","cue":"reveal_wolf","seq":105,"t":135071}
+{"type":"phase","vis":"all","phase":"night","n":2,"seq":106,"t":135071}
+{"type":"narrate","vis":"all","text":"คืนที่ 2 มาถึงแล้ว ทุกคนหลับตา…","big":true,"title":"คืนที่ 2","sub":"ทุกคนหลับตา… หมาป่าออกล่า","cue":"night","seq":107,"t":135071}
+{"type":"thinking","vis":{"seats":[3,4]},"seat":3,"kind":"wolf","seq":108,"t":135071}
+{"type":"thinking","vis":{"seats":[1]},"seat":1,"kind":"target","seq":109,"t":135071}
+{"type":"thinking","vis":{"seats":[0]},"seat":0,"kind":"target","seq":110,"t":135072}
+{"type":"thinking_off","vis":{"seats":[0]},"seat":0,"seq":111,"t":135072}
+{"type":"thought","vis":{"seats":[]},"seat":0,"kind":"target","text":"ป้าว่าตี๋ทิ้งท้ายใส่ร้ายครูให้คนระแวง คืนนี้ป้าขอกันครูไว้ก่อน","seq":112,"t":135072}
+{"type":"night_action","vis":{"seats":[0]},"seat":0,"action":"protect","target":5,"targetName":"ครูวิทย์","seq":113,"t":135072}
+{"type":"thinking_off","vis":{"seats":[1]},"seat":1,"seq":114,"t":135072}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"target","text":"ลุงขอส่องน้องฟ้าเสียหน่อย เมื่อวานไม่ลงตี๋ แต่น้ำขุ่นก็ใช่ว่าจะมีปลาเสมอไป","seq":115,"t":135072}
+{"type":"night_action","vis":{"seats":[1]},"seat":1,"action":"see","target":3,"targetName":"น้องฟ้า","result":"wolf","seq":116,"t":135072}
+{"type":"thinking_off","vis":{"seats":[3,4]},"seat":3,"seq":117,"t":140083}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"wolf","text":"พี่ตี๋ทิ้งระเบิดใส่ครูวิทย์ไว้ให้สวยมาก งั้นคืนนี้หนูขอกำจัดป้าแจ่มก่อนเลยละกัน จะได้ไม่มีคนคอยคุมเกมไล่บี้หนู!","seq":118,"t":140083}
+{"type":"speech","vis":{"seats":[3,4]},"seat":3,"kind":"whisper","text":"พี่ตี๋ไม่อยู่แล้ว เดี๋ยวหนูลุยเดี่ยวเก็บป้าแจ่มเอง พี่รอดูหนูตบตาคนทั้งหมู่บ้านได้เลย!","seq":119,"t":140083}
+{"type":"night_action","vis":{"seats":[3,4]},"seat":3,"action":"kill","target":0,"targetName":"ป้าแจ่ม","seq":120,"t":140083}
+{"type":"dawn","vis":"all","n":2,"seq":121,"t":140083}
+{"type":"phase","vis":"all","phase":"day","n":2,"seq":122,"t":140084}
+{"type":"narrate","vis":"all","text":"เช้าวันที่ 2 … ป้าแจ่ม ถูกพบเป็นศพ (บท: หมอ)","big":true,"title":"เช้าวันที่ 2","sub":"ป้าแจ่ม ถูกพบเป็นศพ · เป็นหมอ","cue":"death","seq":123,"t":140084}
+{"type":"death","vis":"all","seat":0,"cause":"night","role":"doctor","roleTh":"หมอ","seq":124,"t":140084}
+{"type":"round","vis":"all","n":2,"r":1,"rounds":2,"seq":125,"t":140084}
+{"type":"thinking","vis":"all","seat":2,"kind":"speak","seq":126,"t":140084}
+{"type":"thinking_off","vis":"all","seat":2,"seq":127,"t":146577}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"speak","text":"ไอ้ตี๋มันปั่นก่อนตายชัวร์ๆ แต่น้องฟ้าที่โหวตเจ๊คู่กับไอ้ตี๋เมื่อวานเนี่ยแหละพิรุธสุด หรือไม่ก็ลุงเพิ่มที่เนียนตามน้ำ!","seq":128,"t":146578}
+{"type":"speech","vis":"all","seat":2,"kind":"speak","text":"ตายจริงป้าแจ่ม! เห็นไหมล่ะนังฟ้า เมื่อวานแกโหวตเจ๊คู่กับไอ้ตี๋เลยนะยะ! หรือจะบอกว่าโดนหลอก? แล้วไหนใครเป็นหมอดู รีบเปิดหน้าออกมาเดี๋ยวนี้เลย อย่ามัวแต่อมพระมาพูด!","n":2,"r":1,"audio":"/audio/g_20261019_172136/14_muay.mp3","audioSec":13.2,"seq":129,"t":156209}
+{"type":"thinking","vis":"all","seat":3,"kind":"speak","seq":130,"t":156209}
+{"type":"thinking_off","vis":"all","seat":3,"seq":131,"t":161407}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"speak","text":"ขอบคุณมากพี่ตี๋ที่ทิ้งระเบิดให้ครูวิทย์ แถมป้าแจ่มที่เป็นหมอก็ไปแล้ว วันนี้หนูต้องปั่นให้คนโหวตครูวิทย์ให้ได้!","seq":132,"t":161407}
+{"type":"speech","vis":"all","seat":3,"kind":"speak","text":"ใจเย็นดิเจ๊หมวย! เมื่อวานหนูโหวตเจ๊เพราะเจ๊โวยวายต่างหาก ถ้าหนูเป็นหมา หนูจะโหวตคู่พี่ตี๋ให้ตัวเองโป๊ะทำไมล่ะ! ฟังที่พี่ตี๋พูดทิ้งท้ายดิ บอกว่าเพื่อนหมาขายเพื่อนตัวเอง ชี้เป้าไปที่ครูวิทย์ชัดๆ ครูวิทย์นั่นแหละหมาตัวจริง!","n":2,"r":1,"audio":"/audio/g_20261019_172136/15_fah.mp3","audioSec":16.24,"seq":133,"t":171097}
+{"type":"thinking","vis":"all","seat":5,"kind":"speak","seq":134,"t":171097}
+{"type":"thinking_off","vis":"all","seat":5,"seq":135,"t":175907}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"speak","text":"หมาป่าที่กำลังจะตายจะช่วยเพื่อนด้วยการโยนความผิดให้ชาวบ้าน คำสั่งเสียของตี๋จึงเชื่อไม่ได้เลย","seq":136,"t":175907}
+{"type":"speech","vis":"all","seat":5,"kind":"speak","text":"น้องฟ้า ตี๋เป็นหมาป่า คำสั่งเสียของหมาป่าก็ต้องโยนความผิดให้ชาวบ้านอยู่แล้ว แต่ที่ครูเห็นชัดๆ คือเมื่อวานมีแค่เธอคนเดียวที่โหวตเหมือนตี๋ แล้ววันนี้ก็รีบเชื่อคำพูดของตี๋ทันทีเลย","n":2,"r":1,"audio":"/audio/g_20261019_172136/16_wit.mp3","audioSec":17.16,"seq":137,"t":186001}
+{"type":"thinking","vis":"all","seat":1,"kind":"speak","seq":138,"t":186001}
+{"type":"thinking_off","vis":"all","seat":1,"seq":139,"t":186001}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"speak","text":"ลุงเห็นชัดแล้วว่าฟ้าเป็นหมาป่า ถึงเวลาเปิดตัวเสียที","seq":140,"t":186001}
+{"type":"speech","vis":"all","seat":1,"kind":"speak","text":"ลุงเป็นหมอดู คืนแรกส่องครูวิทย์ไม่ใช่หมาป่า คืนสองส่องน้องฟ้าเป็นหมาป่าแน่ๆ น้ำลดตอผุดแล้ว ลุงโหวตฟ้าไม่เปลี่ยนใจ","n":2,"r":1,"audio":"/audio/g_20261019_172136/17_perm.mp3","audioSec":17.56,"seq":141,"t":191738}
+{"type":"round","vis":"all","n":2,"r":2,"rounds":2,"seq":142,"t":191738}
+{"type":"thinking","vis":"all","seat":2,"kind":"speak","seq":143,"t":191738}
+{"type":"thinking_off","vis":"all","seat":2,"seq":144,"t":191738}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"speak","text":"ถ้าลุงเพิ่มเป็นหมอดูจริง แล้วไม่มีใครกล้าเถียง นังฟ้าก็หมาป่าล้านเปอร์เซ็นต์แล้วล่ะย่ะ!","seq":145,"t":191738}
+{"type":"speech","vis":"all","seat":2,"kind":"speak","text":"ว้าย ตายแล้วนังฟ้า! ลุงเพิ่มเปิดหน้าเป็นหมอดูชี้เป้าขนาดนี้ แกยังมีหน้ามาแถโยนขี้ให้ครูวิทย์อีกเหรอยะ โป๊ะแตกตั้งแต่โหวตคู่ไอ้ตี๋เมื่อวานแล้ว เตรียมตัวบินได้เลยย่ะ!","n":2,"r":2,"audio":"/audio/g_20261019_172136/18_muay.mp3","audioSec":14.24,"seq":146,"t":196852}
+{"type":"thinking","vis":"all","seat":3,"kind":"speak","seq":147,"t":196852}
+{"type":"thinking_off","vis":"all","seat":3,"seq":148,"t":196852}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"speak","text":"ซวยละ ลุงเพิ่มเป็นหมอดูจริงแล้วยังส่องโดนเราอีก ต้องบลัฟเป็นหมอดูสู้ไปเลย เผื่อดึงเสียงคนอื่นทัน!","seq":149,"t":196852}
+{"type":"speech","vis":"all","seat":3,"kind":"speak","text":"เดี๋ยวก่อน! ลุงเพิ่มมั่วแล้ว หนูต่างหากที่เป็นหมอดูตัวจริง! เมื่อคืนหนูส่องลุงเพิ่มได้หมาป่าชัดๆ เจ๊หมวยกับครูวิทย์อย่าไปหลงกลหมาป่าปลอมตัวนะ โหวตลุงเพิ่มเลย!","n":2,"r":2,"audio":"/audio/g_20261019_172136/19_fah.mp3","audioSec":12.72,"seq":150,"t":200865}
+{"type":"thinking","vis":"all","seat":5,"kind":"speak","seq":151,"t":200865}
+{"type":"thinking_off","vis":"all","seat":5,"seq":152,"t":200865}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"speak","text":"ครูรู้ตัวเองว่าเป็นชาวบ้าน ลุงเพิ่มส่องครูได้ถูกต้อง ฟ้าเพิ่งมาอ้างเป็นหมอดูหลังโดนชี้ตัว แบบนี้น่าสงสัยมาก","seq":153,"t":200866}
+{"type":"speech","vis":"all","seat":5,"kind":"speak","text":"น้องฟ้า เมื่อกี้เธอบอกว่าครูเป็นหมาป่า พอโดนลุงชี้ตัวถึงค่อยมาบอกว่าตัวเองเป็นหมอดู ถ้าเธอเป็นหมอดูจริง คืนแรกส่องใครไปล่ะ? ลุงส่องครูแล้วได้ผลว่าไม่ใช่หมาป่า ซึ่งถูกต้อง ครูโหวตน้องฟ้านะครับ","n":2,"r":2,"audio":"/audio/g_20261019_172136/20_wit.mp3","audioSec":17.64,"seq":154,"t":210820}
+{"type":"thinking","vis":"all","seat":1,"kind":"speak","seq":155,"t":210820}
+{"type":"thinking_off","vis":"all","seat":1,"seq":156,"t":210820}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"speak","text":"ฟ้าจนมุมแล้ว ลุงต้องยืนยันผลส่องให้ทุกคนมั่นใจ","seq":157,"t":210821}
+{"type":"speech","vis":"all","seat":1,"kind":"speak","text":"ฟ้าเอ๊ย ถ้าส่องลุงเจอจริง ไยเมื่อกี้ถึงชี้ครูวิทย์ว่าเป็นหมาป่าล่ะลูก ลุงเห็นผลกับตาแล้ว น้ำลดตอผุด ลุงโหวตฟ้าเหมือนเดิม","n":2,"r":2,"audio":"/audio/g_20261019_172136/21_perm.mp3","audioSec":16.12,"seq":158,"t":215112}
+{"type":"vote_start","vis":"all","n":2,"seq":159,"t":215112}
+{"type":"narrate","vis":"all","text":"ถึงเวลาโหวต! ชี้ตัวคนที่คิดว่าเป็นหมาป่า","big":true,"title":"ถึงเวลาโหวต!","sub":"ชี้ตัวคนที่คิดว่าเป็นหมาป่า","cue":"vote","seq":160,"t":215112}
+{"type":"thinking","vis":"all","seat":1,"kind":"target","seq":161,"t":215112}
+{"type":"thinking","vis":"all","seat":2,"kind":"target","seq":162,"t":215112}
+{"type":"thinking","vis":"all","seat":3,"kind":"target","seq":163,"t":215112}
+{"type":"thinking","vis":"all","seat":5,"kind":"target","seq":164,"t":215112}
+{"type":"thinking_off","vis":"all","seat":1,"seq":165,"t":215112}
+{"type":"thinking_off","vis":"all","seat":2,"seq":166,"t":215112}
+{"type":"thinking_off","vis":"all","seat":5,"seq":167,"t":215113}
+{"type":"thinking_off","vis":"all","seat":3,"seq":168,"t":217593}
+{"type":"thought","vis":{"seats":[]},"seat":1,"kind":"vote","text":"ลุงส่องเห็นกับตาว่าฟ้าเป็นหมาป่า น้ำลดตอผุดแล้ว ลุงไม่เปลี่ยนใจ","seq":169,"t":217593}
+{"type":"vote","vis":"all","seat":1,"target":3,"targetName":"น้องฟ้า","seq":170,"t":217593}
+{"type":"thought","vis":{"seats":[]},"seat":2,"kind":"vote","text":"แหม นังฟ้า โป๊ะแตกแล้วยังจะกล้าสวมรอยเป็นหมอดูทับลุงเพิ่มอีกนะยะ ตอนแรกชี้นิ้วใส่ครูวิทย์อยู่ดีๆ พอจวนตัวก็เปลี่ยนบทเฉย ไปหลอกเด็กอนุบาลเถอะย่ะ!","seq":171,"t":217593}
+{"type":"vote","vis":"all","seat":2,"target":3,"targetName":"น้องฟ้า","seq":172,"t":217593}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"vote","text":"โป๊ะแตกยับเยินขนาดนี้ยังไงก็ไม่รอดละ แต่หนูอ้างว่าเป็นหมอดูส่องลุงเพิ่มไว้ ยังไงก็ต้องโหวตลุงเพิ่มไปตามน้ำให้สุดทาง!","seq":173,"t":217593}
+{"type":"vote","vis":"all","seat":3,"target":1,"targetName":"ลุงเพิ่ม","seq":174,"t":217593}
+{"type":"thought","vis":{"seats":[]},"seat":5,"kind":"vote","text":"หลักฐานเรียงกันชัดเจน ฟ้าโหวตคู่กับตี๋ ชี้ครูก่อน แล้วค่อยมาอ้างเป็นหมอดูทีหลังตอนโดนจับได้ ส่วนผลส่องของลุงก็ตรงกับที่ครูรู้ว่าตัวเองบริสุทธิ์","seq":175,"t":217593}
+{"type":"vote","vis":"all","seat":5,"target":3,"targetName":"น้องฟ้า","seq":176,"t":217593}
+{"type":"vote_result","vis":"all","n":2,"tally":{"1":1,"3":3},"eliminated":3,"seq":177,"t":217593}
+{"type":"narrate","vis":"all","text":"น้องฟ้า ถูกโหวตออกด้วย 3 เสียง ขอคำสั่งเสียหน่อย","big":true,"title":"น้องฟ้า ถูกโหวตออก","sub":"3 เสียง · ขอคำสั่งเสียหน่อย","cue":"eliminate","seq":178,"t":217593}
+{"type":"thinking","vis":"all","seat":3,"kind":"last","seq":179,"t":217594}
+{"type":"thinking_off","vis":"all","seat":3,"seq":180,"t":227939}
+{"type":"thought","vis":{"seats":[]},"seat":3,"kind":"last","text":"โป๊ะแตกจนได้ ถ้ารู้ว่าลุงเพิ่มเป็นหมอดูเมื่อคืนหนูงาบลุงไปแทนป้าแจ่มก็ชนะแล้วเนี่ย เซ็งเลย!","seq":181,"t":227939}
+{"type":"speech","vis":"all","seat":3,"kind":"last","text":"โอ๊ยยย ยอมก็ได้ค่ะ หนูเป็นหมาป่าเองแหละ! ลุงเพิ่มแม่นเกิ๊น ถ้ารู้ว่าลุงเป็นหมอดูนะ เมื่อคืนหนูงาบลุงไปแทนป้าแจ่มแล้ว เชอะ!","n":2,"audio":"/audio/g_20261019_172136/22_fah.mp3","audioSec":10.36,"seq":182,"t":235433}
+{"type":"death","vis":"all","seat":3,"cause":"vote","role":"wolf","roleTh":"หมาป่า","seq":183,"t":235433}
+{"type":"narrate","vis":"all","text":"น้องฟ้า เป็น… หมาป่า!","big":true,"title":"น้องฟ้า เป็น…","sub":"หมาป่า!","cue":"reveal_wolf","seq":184,"t":235433}
+{"type":"game_over","vis":"all","winner":"village","text":"ชาวบ้านชนะ! หมาป่าถูกกำจัดหมดแล้ว","reveal":[{"seat":0,"id":"jaem","name":"ป้าแจ่ม","tag":"แม่ค้าตลาด","color":"#C2566B","role":"doctor","roleTh":"หมอ","provider":"codex","company":"OpenAI","label":"ChatGPT","model":"gpt-6.1-sol","modelLabel":"GPT-6.1 Sol","companyColor":"#10A37F","replacedProvider":null,"alive":false},{"seat":1,"id":"perm","name":"ลุงเพิ่ม","tag":"ชาวนา","color":"#8A9A5B","role":"seer","roleTh":"หมอดู","provider":"codex","company":"OpenAI","label":"ChatGPT","model":"gpt-6.1-sol","modelLabel":"GPT-6.1 Sol","companyColor":"#10A37F","replacedProvider":null,"alive":true},{"seat":2,"id":"muay","name":"เจ๊หมวย","tag":"เจ้าของร้านชำ","color":"#D08B3E","role":"villager","roleTh":"ชาวบ้าน","provider":"gemini","company":"Google","label":"Gemini","model":"gemini-4-argon","modelLabel":"4 Argon","companyColor":"#4285F4","replacedProvider":null,"alive":true},{"seat":3,"id":"fah","name":"น้องฟ้า","tag":"นักเรียน","color":"#4FA3D1","role":"wolf","roleTh":"หมาป่า","provider":"gemini","company":"Google","label":"Gemini","model":"gemini-4-argon","modelLabel":"4 Argon","companyColor":"#4285F4","replacedProvider":null,"alive":false},{"seat":4,"id":"tee","name":"ตี๋","tag":"เด็กติดเกม","color":"#3FA88B","role":"wolf","roleTh":"หมาป่า","provider":"claude","company":"Anthropic","label":"Claude","model":"claude-opus-5-5","modelLabel":"Opus 5.5","companyColor":"#D97757","replacedProvider":null,"alive":false},{"seat":5,"id":"wit","name":"ครูวิทย์","tag":"ครูวิทยาศาสตร์","color":"#7C6BC4","role":"villager","roleTh":"ชาวบ้าน","provider":"claude","company":"Anthropic","label":"Claude","model":"claude-opus-5-5","modelLabel":"Opus 5.5","companyColor":"#D97757","replacedProvider":null,"alive":true}],"durationSec":235,"seq":185,"t":235435}
