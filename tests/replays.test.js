@@ -38,11 +38,11 @@ async function sse(url) {
   return evs;
 }
 
-test('a fresh install lists the two games from the ep003 clip', async () => {
+test('a fresh install lists the two games from the clip', async () => {
   const games = await fetch(base + '/api/games').then((r) => r.json());
   const clip = games.filter((g) => g.fromClip);
   assert.deepStrictEqual(clip.map((g) => g.id).sort(), ['g_20261019_172136', 'g_20261019_173400']);
-  for (const g of clip) assert.match(g.label, /ep003/);
+  for (const g of clip) assert.match(g.label, /^จากคลิป VreKi_ · /);
 });
 
 test('a clip game replays to the end in audience view, with its voice files', async () => {

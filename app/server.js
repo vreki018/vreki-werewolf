@@ -106,7 +106,7 @@ function body(req) {
 
 const MIME = { '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2' };
 
-// the two games from the ep003 clip ship in replays/ (read-only); the viewer's own games live in data/logs
+// the two games from the clip ship in replays/ (read-only); the viewer's own games live in data/logs
 let clipIndex = [];
 try { clipIndex = JSON.parse(fs.readFileSync(path.join(P.REPLAYS, 'index.json'), 'utf8')); } catch (_) {}
 const VALID_ID = /^g_[0-9_]+$/;

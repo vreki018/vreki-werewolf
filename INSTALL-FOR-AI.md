@@ -6,7 +6,8 @@ You are Claude Code or Codex, running inside the folder of the "หมู่บ�
 
 - **Ask before you install anything** (Node.js, Python, ffmpeg, pip packages, CLIs). Say what it is, why the game needs it, and how big it is roughly. Never install silently.
 - **Never run a real AI game or a real connection test without asking.** Every AI call uses the user's plan quota. Self-tests in this guide use test mode (no AI calls).
-- **The Gemini key is secret.** If the user gives you one, write it only to `data/gemini_key.txt` (create `data/` if needed). Never print it, echo it back, put it in another file, a command line, a URL, or send it anywhere.
+- **The Gemini key is secret and never goes through this chat.** Never ask for it and never accept it here: what is typed in this chat goes to your AI company and stays in the chat history. The user pastes it into the game's own **ตั้งค่า AI และเสียง** card, and the game saves it in `data/gemini_key.txt`. Never open, read, print, copy or send that file. If the user pastes a key into the chat anyway, do not use or repeat it; tell them in Thai to put it in the card instead, and that they may want to make a new key in Google AI Studio because this chat now holds the old one.
+- **Never start the game or its server yourself** (`start.bat`, `app/launch.js` without `--selftest`, `app/server.js`): it keeps running and would hang your tool. The user opens the game by double-clicking the icon.
 - Do not change the game's code. Do not run `git` commands that change history. Do not delete folders.
 - Stop and ask when a step fails twice.
 
@@ -54,7 +55,7 @@ Needed only for **Gemini voices** (not for the free voice). Ask the user whether
 
 ## 4. Gemini key (optional)
 
-Ask once: "มีคีย์ Gemini API ไหม (ไม่มีก็เล่นได้)". If the user pastes a key, write it to `data/gemini_key.txt` (just the key, one line). Otherwise skip — they can add it later in the game's settings card.
+Do not ask for the key and do not take it in this chat. Tell the user in Thai, for example: "ถ้ามีคีย์ Gemini API ให้วางในการ์ด **ตั้งค่า AI และเสียง** หลังเปิดเกม แล้วกดบันทึก · ห้ามส่งคีย์ในแชทนี้ · ไม่มีคีย์ก็เล่นได้". The game saves the key itself.
 
 ## 4b. Mic / push-to-talk (optional)
 
@@ -94,7 +95,7 @@ Summarise in a few lines:
 
 - what was installed, what is ready: Claude / ChatGPT / Gemini / free voice / Gemini voice
 - what is still missing and how to fix it (e.g. "ยังไม่ได้ล็อกอิน Codex — พิมพ์ codex login")
-- how to start: double-click **หมู่บ้านหมาป่า** on the desktop → the browser opens the game → press **ตั้งค่า AI และเสียง** to pick companies and press **ทดสอบ** (each test uses 1 call of quota)
+- how to start: double-click **หมู่บ้านหมาป่า** on the desktop → the browser opens the game → press **ตั้งค่า AI และเสียง** to pick companies, paste a Gemini key there if they have one, and press **ทดสอบ** (each test uses 1 call of quota)
 - the quota note: one game ≈ 30–45 AI calls (estimate); a $20 plan may only allow a few games per 5 hours
 
-Then ask whether they want you to start the game now (`start.bat`). Do not start a real AI game yourself.
+Do not start `start.bat` or the server yourself (a long-running process would hang your tool). Tell the user to double-click the **หมู่บ้านหมาป่า** icon on the desktop (or `start.bat` in the game folder) to open the game. Do not start a real AI game yourself.

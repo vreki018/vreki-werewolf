@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""VreKi ep003 - one line of text + character id -> mp3.
+"""VreKi_ - one line of text + character id -> mp3.
 
 Engines (chosen per character in tts_voices.json, "engine": "gemini" | "edge"):
   gemini = Google Gemini TTS (paid key, voice + style prompt per character, ONE request per line, never split).
@@ -535,7 +535,7 @@ async def serve():
 
 
 def main():
-    ap = argparse.ArgumentParser(description="VreKi ep003 character TTS (Gemini with Edge fallback)")
+    ap = argparse.ArgumentParser(description="VreKi_ character TTS (Gemini with Edge fallback)")
     ap.add_argument("--char", help="character id from tts_voices.json (jaem, perm, fah, wit, muay, tee)")
     ap.add_argument("--text", help="line to speak")
     ap.add_argument("--stdin", action="store_true", help="read the line from stdin (UTF-8)")

@@ -40,7 +40,7 @@ SR = 16000
 MODEL = "large-v3"  # --model overrides (config.json stt.model); "h2oai/faster-whisper-large-v3-turbo" is ~4x faster, more wrong words
 # names and game words the clip is likely to contain; biases spelling without forcing it
 PROMPT = "เกมหมาป่า ป้าแจ่ม ลุงเพิ่ม น้องฟ้า ครูวิทย์ เจ๊หมวย ตี๋ หมาป่า หมอดู หมอ ชาวบ้าน โหวต"
-# whole-clip outputs whisper invents on silence or breath (seen in ep001/ep002 transcripts)
+# whole-clip outputs whisper invents on silence or breath (seen in earlier clip transcripts)
 JUNK = ("ขอบคุณที่รับชม", "โปรดติดตามตอนต่อไป", "ซับไทย", "ติดตามช่อง", "กดไลค์", "กดติดตาม", "สวัสดีครับ", "Thank you")
 
 
