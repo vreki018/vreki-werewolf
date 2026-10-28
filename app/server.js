@@ -119,9 +119,26 @@ function listGames() {
   return [...clip, ...own];
 }
 
+// Only the game's own page may talk to the game. Other sites open in the same browser
+// could otherwise POST here (a text/plain "simple request" skips CORS) or read it through
+// DNS rebinding: refuse foreign Host / Origin, and POSTs that are not JSON.
+function blocked(req) {
+  const port = server.address()?.port;
+  const own = [`localhost:${port}`, `127.0.0.1:${port}`];
+  if (!own.includes(String(req.headers.host || '').toLowerCase())) return [403, 'forbidden host'];
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    const origin = req.headers.origin;
+    if (origin && !own.some((h) => origin.toLowerCase() === `http://${h}`)) return [403, 'forbidden origin'];
+    if (!/^application\/json\b/i.test(String(req.headers['content-type'] || ''))) return [415, 'json only'];
+  }
+  return null;
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   const p = url.pathname;
+  const no = blocked(req);
+  if (no) return json(res, no[0], { error: no[1] });
   try {
     if (p === '/events') {
       const replayId = url.searchParams.get('replay');
@@ -169,13 +186,14 @@ const server = http.createServer(async (req, res) => {
 
     if (p === '/api/settings' && req.method === 'POST') {
       const b = await body(req);
+      delete b.paths; // program paths are never set over HTTP (the game runs them); edit data/settings.json by hand
       if (typeof b.geminiKey === 'string' && b.geminiKey.trim()) {
         fs.mkdirSync(P.DATA, { recursive: true });
         fs.writeFileSync(P.GEMINI_KEY_FILE, b.geminiKey.trim());
       } else if (b.geminiKey === null) {
         try { fs.unlinkSync(P.GEMINI_KEY_FILE); } catch (_) {}
       }
-      if ('geminiKey' in b || b.paths) D.clearDetectCache();
+      if ('geminiKey' in b) D.clearDetectCache();
       const settings = S.saveSettings(b);
       const geminiKeySet = fs.existsSync(P.GEMINI_KEY_FILE);
       return json(res, 200, { settings, geminiKeySet });

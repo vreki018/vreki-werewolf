@@ -144,7 +144,7 @@
     }
     if (act === 'shutdown') {
       if (!(await SETUP.confirm('ปิดเกม? (เกมที่เล่นอยู่จะหยุด)'))) return;
-      await fetch('/api/shutdown', { method: 'POST' }).catch(() => {});
+      await fetch('/api/shutdown', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(() => {});
       $('#closedNote').hidden = false;
     }
     const t = e.target.closest('[data-test]');

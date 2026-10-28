@@ -36,6 +36,7 @@ async function resolveTool(name, override, deps = {}) {
   const where = deps.where || whereExe;
   const home = deps.home || os.homedir();
   if (override) {
+    if (/^[\\/]{2}/.test(override)) return { ok: false, reason: 'ไม่ใช้โปรแกรมจากเครื่องอื่นในเครือข่าย' };
     if (!exists(override)) return { ok: false, reason: `ไม่เจอไฟล์ ${override}` };
     return { ok: true, path: override, runner: /\.js$/i.test(override) ? 'node' : 'exe' };
   }
