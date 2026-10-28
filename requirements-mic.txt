@@ -1,0 +1,6 @@
+# optional: push-to-talk (speak instead of typing when you play) — NVIDIA cards only
+# versions that ran on the build PC (Python 3.12, CUDA 12 wheels)
+faster-whisper==1.2.1
+nvidia-cublas-cu12>=12.9,<13
+nvidia-cudnn-cu12>=9.0,<10
+nvidia-cuda-nvrtc-cu12>=12.9,<13

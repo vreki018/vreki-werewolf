@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,600;0,800;1,800;1,900&family=Mali:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="app-color.css">
+<link rel="stylesheet" href="ptt.css">
 <link rel="stylesheet" href="setup.css">
 <script>
   // look: "color" (default since VreKi picked it 2026-10-18) or "ink" (black-and-white comic) — from ?look=… or the last choice (avatars.js saves it)
@@ -77,6 +78,11 @@
       <label class="check"><input type="radio" name="voice" value="gemini"> เสียง Gemini</label>
     </div>
     <p id="voiceNote" class="voice-note"></p>
+    <div class="voice-row">
+      <b>ไมค์</b>
+      <label class="check"><input type="checkbox" id="micToggle"> พูดใส่ไมค์แทนการพิมพ์ ตอนเล่นด้วย</label>
+    </div>
+    <p id="micNote" class="voice-note"></p>
     <div class="setup-actions">
       <button class="link" data-act="recheck">เช็คโปรแกรมใหม่</button>
       <button class="btn primary" data-act="close-setup">เสร็จแล้ว</button>
@@ -138,6 +144,7 @@
 
 <script src="avatars.js"></script>
 <script src="app.js"></script>
+<script src="ptt.js"></script>
 <script src="setup.js"></script>
 </body>
 </html>

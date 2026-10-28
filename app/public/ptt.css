@@ -1,0 +1,28 @@
+/* ptt.css — push-to-talk in the human dock (ptt.js). Same ink style as the dock in app.css;
+   red only while recording (= "live"), like the danger accents elsewhere. Works in both looks. */
+#dockMic {
+  position: relative; overflow: hidden; flex-direction: row; gap: .6vw; align-items: center; justify-content: center;
+  flex: none; width: 12vw; background: var(--ink); color: #fff; border-color: var(--ink); outline: none;
+  user-select: none; -webkit-user-select: none; touch-action: none;
+}
+#dockMic svg { width: 3vh; height: 3vh; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; flex: none; }
+#dockMic .mic-lbl { font: 700 2vh 'Mali', sans-serif; white-space: nowrap; }
+/* input level while recording: a white bar along the bottom edge */
+#dockMic .mic-lvl {
+  position: absolute; left: 0; bottom: 0; height: .7vh; width: 100%; background: #fff;
+  transform-origin: left center; transform: scaleX(var(--lvl, 0)); transition: transform 60ms linear;
+}
+#humanDock.ptt-rec { border-color: var(--red); outline-color: var(--red); }
+#humanDock.ptt-rec #dockMic { background: var(--red); animation: ptt-pulse .9s ease-in-out infinite; }
+#humanDock.ptt-busy #dockMic { background: #444; }
+@keyframes ptt-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(215, 38, 46, .55); } 50% { box-shadow: 0 0 0 .9vh rgba(215, 38, 46, 0); } }
+
+.mic-status { margin-top: .7vh; min-height: 2vh; font: 600 1.65vh 'Mali', sans-serif; color: #555; }
+.dock-row[hidden] + .mic-status { display: none; }
+.mic-status[data-state="rec"] { color: var(--red); font-weight: 700; }
+.mic-status[data-state="busy"] { color: var(--ink); }
+.mic-status[data-state="busy"]::after { content: ''; display: inline-block; width: 1.4vh; height: 1.4vh; margin-left: .6vw; vertical-align: -.2vh;
+  border: .3vh solid var(--ink); border-right-color: transparent; border-radius: 50%; animation: ptt-spin .7s linear infinite; }
+.mic-status[data-state="done"] { color: var(--ink); }
+.mic-status[data-state="error"] { color: var(--red); }
+@keyframes ptt-spin { to { transform: rotate(360deg); } }

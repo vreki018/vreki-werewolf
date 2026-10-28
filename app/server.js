@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { Game } = require('./engine');
 const { Voice } = require('./voice');
+const { Stt } = require('./stt');
 const P = require('./paths');
 const S = require('./settings');
 const D = require('./detect');
@@ -28,6 +29,9 @@ function log(...a) {
 
 let game = null;
 let voice = null; // tts.py workers, started by the first game that has voices on
+let stt = null;     // stt.py worker (push-to-talk), started by the first game with the mic on
+let micGame = null; // id of the game whose player may use the mic
+let sttN = 0;
 const clients = new Set(); // { res, view, seat }
 
 // which voice modes this PC can play right now
@@ -57,9 +61,20 @@ function setupInfo(det, settings) {
     settings,
     detect: { claude: pub(det.claude), codex: pub(det.codex), gemini: pub(det.gemini), python: { ...pub(det.python), edgeTts: det.python.edgeTts }, ffmpeg: pub(det.ffmpeg) },
     voiceModes: voiceModes(det),
+    mic: { ready: det.stt.ready, reason: det.stt.reason },
     defaults: S.DEFAULTS,
     labels: Object.fromEntries(S.COMPANIES.map((id) => [id, { label: CONFIG.providers[id].label, color: CONFIG.providers[id].color, modelLabel: CONFIG.providers[id].modelLabel }])),
   };
+}
+
+// raw request body (the push-to-talk WAV clip), capped
+function rawBody(req, max) {
+  return new Promise((resolve) => {
+    const parts = []; let n = 0;
+    req.on('data', (d) => { n += d.length; if (n > max) { req.destroy(); resolve(null); } else parts.push(d); });
+    req.on('end', () => resolve(Buffer.concat(parts)));
+    req.on('error', () => resolve(null));
+  });
 }
 
 const THAI_COMPANY = { claude: 'Claude', codex: 'ChatGPT', gemini: 'Gemini' };
@@ -129,7 +144,9 @@ function blocked(req) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     const origin = req.headers.origin;
     if (origin && !own.some((h) => origin.toLowerCase() === `http://${h}`)) return [403, 'forbidden origin'];
-    if (!/^application\/json\b/i.test(String(req.headers['content-type'] || ''))) return [415, 'json only'];
+    const type = String(req.headers['content-type'] || '');
+    const wavOk = req.url === '/api/stt' || req.url.startsWith('/api/stt?'); // the push-to-talk clip
+    if (!/^application\/json\b/i.test(type) && !(wavOk && /^audio\/wav\b/i.test(type))) return [415, 'json only'];
   }
   return null;
 }
@@ -235,20 +252,46 @@ const server = http.createServer(async (req, res) => {
       const wantVoice = S.VOICES.includes(b.voice) ? b.voice : settings.voice;
       const voiceUsed = mock && !b.mockVoice ? 'off' : pickVoice(wantVoice, voiceModes(det));
       const showCompanies = !humanChar && (typeof b.showCompanies === 'boolean' ? b.showCompanies : settings.showCompanies);
+      // mic only for a player game, with the setting on and a PC that can run it (NVIDIA)
+      const micUsed = !!humanChar && settings.mic && det.stt.ready;
       const cfg = D.withTools(S.applyModels(CONFIG, settings), det);
       const g = new Game(cfg, { humanSeat: humanChar ? null : humanSeat, humanChar, mock, mockDelay: b.mockDelay, seatsPerProvider: seats, showCompanies,
         voice: voiceFor(voiceUsed, det), onEvent: (ev) => { if (game === g) broadcast(ev); } });
       game = g;
-      log('new game', g.id, 'human', g.humanSeat, humanChar || '', 'mock', mock, 'seats', JSON.stringify(seats), 'voice', voiceUsed, 'show', showCompanies);
+      micGame = micUsed ? g.id : null;
+      if (micUsed) {
+        if (!stt) stt = new Stt({ python: det.stt.python, script: path.join(__dirname, 'stt.py'), model: D.STT_MODEL, timeoutSec: 40 }, log);
+        stt.start(); // load the model while the AIs take their first turns
+      }
+      log('new game', g.id, 'human', g.humanSeat, humanChar || '', 'mock', mock, 'seats', JSON.stringify(seats), 'voice', voiceUsed, 'show', showCompanies, 'mic', micUsed);
       for (const c of clients) if (!c.replay) send(c.res, { type: 'reset', gameId: g.id, humanSeat: g.humanSeat });
       setTimeout(() => g.run().then(() => log('game done', g.id, g.summary?.winner)), 300);
-      return json(res, 200, { ok: true, gameId: g.id, humanSeat: g.humanSeat, seats, voiceUsed, showCompanies });
+      return json(res, 200, { ok: true, gameId: g.id, humanSeat: g.humanSeat, seats, voiceUsed, showCompanies, micUsed });
     }
 
     if (p === '/api/human' && req.method === 'POST') {
       if (!game) return json(res, 400, { error: 'no game' });
       const r = game.humanInput(await body(req));
       return json(res, r.ok ? 200 : 400, r);
+    }
+
+    // push-to-talk: body = 16-bit mono WAV from the player page → Thai text
+    if (p === '/api/stt' && req.method === 'POST') {
+      if (!stt || !game || micGame !== game.id) return json(res, 503, { ok: false, error: 'ไมค์ปิดอยู่' });
+      const wav = await rawBody(req, 8 * 1024 * 1024);
+      if (!wav || wav.length < 44 || wav.toString('ascii', 0, 4) !== 'RIFF') return json(res, 400, { ok: false, error: 'need a WAV body' });
+      const dir = path.join(CONFIG.logsDir, game.id, 'stt');
+      fs.mkdirSync(dir, { recursive: true });
+      const f = path.join(dir, `${String(++sttN).padStart(3, '0')}.wav`);
+      fs.writeFileSync(f, wav);
+      const r = await stt.transcribe(f);
+      log(`stt #${sttN} ${r.ok ? 'ok' : 'FAIL ' + r.error} ${r.audio_sec}s -> ${r.stt_ms} ms`);
+      return json(res, r.ok ? 200 : 500, { ok: r.ok, text: r.text ?? null, error: r.error || null, n: sttN, stt_ms: r.stt_ms, audio_sec: r.audio_sec, server_ms: r.ms, gameId: game.id });
+    }
+    if (p === '/api/stt/status') {
+      if (!stt || !game || micGame !== game.id) return json(res, 200, { state: 'disabled' });
+      if (url.searchParams.get('warm') === '1') stt.start();
+      return json(res, 200, stt.status());
     }
 
     if (p === '/api/abort' && req.method === 'POST') {
@@ -271,7 +314,7 @@ const server = http.createServer(async (req, res) => {
       json(res, 200, { ok: true });
       log('shutdown requested');
       if (game && !game.done) game.abort();
-      setTimeout(() => { voice && voice.close(); process.exit(0); }, 400);
+      setTimeout(() => { voice && voice.close(); stt && stt.close(); process.exit(0); }, 400);
       return;
     }
 
@@ -311,7 +354,7 @@ function start(port = CONFIG.port) {
       server.on('error', (e) => log('server error', e.stack || e));
       const real = server.address().port;
       log(`werewolf room on http://localhost:${real} pid ${process.pid}`);
-      resolve({ port: real, close: () => { if (game && !game.done) game.abort(); voice && voice.close(); for (const c of clients) c.res.end(); server.close(); } });
+      resolve({ port: real, close: () => { if (game && !game.done) game.abort(); voice && voice.close(); stt && stt.close(); for (const c of clients) c.res.end(); server.close(); } });
     };
     server.once('error', onErr);
     server.once('listening', onOk);

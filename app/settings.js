@@ -16,7 +16,8 @@ const DEFAULTS = Object.freeze({
   effort: { claude: 'medium', codex: 'medium' },
   voice: 'free',
   showCompanies: false,
-  paths: { claude: null, codex: null, python: null, ffmpeg: null },
+  mic: false, // push-to-talk when you play (NVIDIA cards only)
+  paths: { claude: null, codex: null, python: null, ffmpeg: null, sttPython: null },
 });
 
 // 6 seats shared as evenly as possible between the picked companies (6 · 3+3 · 2+2+2)
@@ -41,6 +42,7 @@ function clean(raw) {
   for (const id of Object.keys(s.effort)) if (EFFORTS.includes(r.effort?.[id])) s.effort[id] = r.effort[id];
   if (VOICES.includes(r.voice)) s.voice = r.voice;
   if (typeof r.showCompanies === 'boolean') s.showCompanies = r.showCompanies;
+  if (typeof r.mic === 'boolean') s.mic = r.mic;
   for (const k of Object.keys(s.paths)) { const v = str(r.paths?.[k], 400); s.paths[k] = v; }
   return s;
 }
@@ -59,6 +61,7 @@ function saveSettings(patch) {
     effort: { ...cur.effort, ...(p.effort || {}) },
     ...('voice' in p ? { voice: p.voice } : {}),
     ...('showCompanies' in p ? { showCompanies: p.showCompanies } : {}),
+    ...(typeof p.mic === 'boolean' ? { mic: p.mic } : {}),
     paths: { ...cur.paths, ...(p.paths || {}) },
   });
   fs.mkdirSync(path.dirname(P.SETTINGS_FILE), { recursive: true });

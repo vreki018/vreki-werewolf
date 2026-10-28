@@ -136,6 +136,44 @@ async function checkCli(name, tool) {
   return { ready: true, reason: null, warn: null };
 }
 
+// ---- push-to-talk (speak instead of typing when you play) ----
+// Tested only with NVIDIA cards (faster-whisper large-v3 on CUDA). Other cards / no card: no data.
+const STT_MODEL = 'large-v3';
+const STT_PROBE = [
+  'import importlib.util as u',
+  'fw = u.find_spec("faster_whisper") is not None',
+  'model = False',
+  'if fw:',
+  '    try:',
+  '        from faster_whisper.utils import download_model',
+  `        download_model("${STT_MODEL}", local_files_only=True); model = True`,
+  '    except Exception: pass',
+  'print(fw); print(model)',
+].join('\n');
+
+async function probeStt(py) {
+  const out = await new Promise((resolve) => {
+    execFile(py, ['-c', STT_PROBE], { windowsHide: true, timeout: 30000, encoding: 'utf8', env: { ...process.env, PYTHONIOENCODING: 'utf-8', HF_HUB_OFFLINE: '1' } },
+      (err, o) => resolve(err ? null : String(o)));
+  });
+  const [fw, model] = String(out || '').trim().split(/\r?\n/);
+  return { fw: fw === 'True', model: model === 'True' };
+}
+
+// → { ready, python, reason }  deps (tests): { where, python: resolvePython() result, probe(py) }
+async function resolveStt(settings = {}, deps = {}) {
+  const where = deps.where || whereExe;
+  const gpu = (await where('nvidia-smi')).length > 0;
+  if (!gpu) return { ready: false, python: null, reason: 'ไมค์ใช้ได้เฉพาะเครื่องที่มีการ์ดจอ NVIDIA · การ์ดยี่ห้ออื่นหรือไม่มีการ์ดจอ ยังไม่มีข้อมูลว่าใช้ได้ไหม ไม่แนะนำ' };
+  const override = settings.paths?.sttPython;
+  const py = override && !/^[\\/]{2}/.test(override) && exists(override) ? { ok: true, path: override } : (deps.python || await resolvePython(settings.paths?.python));
+  if (!py?.ok) return { ready: false, python: null, reason: 'ไมค์ต้องมี Python 3.10 ขึ้นไปก่อน' };
+  const p = await (deps.probe || probeStt)(py.path);
+  if (!p.fw) return { ready: false, python: py.path, reason: 'ยังไม่ได้ติดตั้งตัวแปลงเสียง — ให้ AI ทำขั้น "ไมค์" ใน INSTALL-FOR-AI.md' };
+  if (!p.model) return { ready: false, python: py.path, reason: 'ยังไม่ได้โหลดโมเดลแปลงเสียง (ราว 3 GB) — ให้ AI ทำขั้น "ไมค์" ใน INSTALL-FOR-AI.md' };
+  return { ready: true, python: py.path, reason: null };
+}
+
 let cache = null;
 async function detectAll(settings = {}, { refresh = false } = {}) {
   if (!refresh && cache && Date.now() - cache.at < 30000) return cache.value;
@@ -144,13 +182,14 @@ async function detectAll(settings = {}, { refresh = false } = {}) {
     resolveTool('claude', paths.claude), resolveTool('codex', paths.codex), resolvePython(paths.python), resolveTool('ffmpeg', paths.ffmpeg),
   ]);
   const keySet = exists(P.GEMINI_KEY_FILE) && fs.readFileSync(P.GEMINI_KEY_FILE, 'utf8').trim().length > 0;
-  const [cl, cx] = await Promise.all([checkCli('claude', claude), checkCli('codex', codex)]);
+  const [cl, cx, stt] = await Promise.all([checkCli('claude', claude), checkCli('codex', codex), resolveStt(settings, { python })]);
   const value = {
     claude: { ...cl, path: claude.path || null, runner: claude.runner || null },
     codex: { ...cx, path: codex.path || null, runner: codex.runner || null },
     gemini: { ready: keySet, reason: keySet ? null : explainError('gemini', 'no key file') },
     python: { ready: python.ok, path: python.path || null, edgeTts: !!python.edgeTts, reason: python.ok ? (python.edgeTts ? null : 'ยังไม่ได้ติดตั้ง edge-tts (pip install -r requirements.txt)') : python.reason },
     ffmpeg: { ready: ffmpeg.ok, path: ffmpeg.path || null },
+    stt,
   };
   cache = { at: Date.now(), value };
   return value;
@@ -204,4 +243,4 @@ async function testProvider(id, config, det) {
   return { ok: false, ms: r.ms || 0, message: explainError(id, `${r.error || ''} ${r.stderr || ''} ${r.text || ''}`, pc.model), raw: String(r.error || '').slice(0, 300) };
 }
 
-module.exports = { parseLogin, versionTooOld, checkCli, resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };
+module.exports = { resolveStt, STT_MODEL, parseLogin, versionTooOld, checkCli, resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };

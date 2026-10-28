@@ -56,6 +56,21 @@ Needed only for **Gemini voices** (not for the free voice). Ask the user whether
 
 Ask once: "มีคีย์ Gemini API ไหม (ไม่มีก็เล่นได้)". If the user pastes a key, write it to `data/gemini_key.txt` (just the key, one line). Otherwise skip — they can add it later in the game's settings card.
 
+## 4b. Mic / push-to-talk (optional)
+
+Lets the user speak instead of typing when they play a seat. **Tested only with NVIDIA graphics cards.** With another brand or no graphics card there is no data on whether it works — do not recommend it; skip this step.
+
+1. Run `nvidia-smi`. Not found → tell the user the mic needs an NVIDIA card, skip.
+2. Ask the user (it downloads about 3 GB in total and uses disk space). Then:
+
+   ```
+   py -3 -m pip install -r requirements-mic.txt
+   py -3 -c "from faster_whisper.utils import download_model; download_model('large-v3')"
+   ```
+
+3. If the user keeps faster-whisper in another Python (a venv), write that python.exe path into `data/settings.json` → `"paths": { "sttPython": "..." }` (the web page cannot set paths).
+4. In the game: settings card → **ไมค์** → tick it. It only works in "ฉันเล่นด้วย"; hold Space to talk.
+
 ## 5. Self-test (no AI calls)
 
 ```

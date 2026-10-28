@@ -118,6 +118,12 @@
     if (!info.voiceModes.gemini) notes.push(!info.detect.gemini.ready ? 'เสียง Gemini ต้องใส่คีย์ Gemini ก่อน' : (!info.detect.ffmpeg.ready ? 'เสียง Gemini ต้องติดตั้ง ffmpeg' : ''));
     notes.push('เสียง Gemini มีปัญหาบรรทัดไหน จะใช้เสียงฟรีแทนบรรทัดนั้น');
     $('#voiceNote').textContent = notes.filter(Boolean).join(' · ');
+    const mic = info.mic || { ready: false, reason: '' };
+    $('#micToggle').checked = !!settings.mic && mic.ready;
+    $('#micToggle').disabled = !mic.ready;
+    $('#micNote').textContent = mic.ready
+      ? 'เทสแล้วกับการ์ดจอ NVIDIA · ตอนถึงตาเรา กดค้าง Space แล้วพูด · เกมแรกรอโหลดโมเดลราว 10 วิ'
+      : mic.reason;
   }
 
   function openSetup() { $('#setup').hidden = false; renderCard(); }
@@ -170,6 +176,7 @@
     if (m && m.value.trim()) { delete tests[m.dataset.model]; save({ models: { [m.dataset.model]: m.value.trim() } }); }
     if (e.target.name === 'voice') { settings.voice = e.target.value; save({ voice: e.target.value }); }
     if (e.target.id === 'showCompanies') { settings.showCompanies = e.target.checked; save({ showCompanies: e.target.checked }); }
+    if (e.target.id === 'micToggle') { settings.mic = e.target.checked; save({ mic: e.target.checked }); }
   });
 
   document.addEventListener('keydown', (e) => {
