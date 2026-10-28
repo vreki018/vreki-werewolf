@@ -190,6 +190,7 @@ async function apply(ev, instant) {
     case 'vote': return onVote(ev, instant);
     case 'vote_result': return onVoteResult(ev, instant);
     case 'note': log(ev.text, 'note'); return;
+    case 'ai_error': log('⚠ ' + ev.text, 'note'); if (!instant) toast(ev.text, 7000); return;
     case 'await_human': if (S.view === 'player' && ev.seat === S.seat) showDock(ev); return;
     case 'human_done': hideDock(); return;
     case 'game_over': return onGameOver(ev, instant);
@@ -576,7 +577,7 @@ function log(html, cls = '', isHtml = false) {
 }
 
 // ---------------- keys ----------------
-function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 1200); }
+function toast(t, ms = 1200) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), ms); }
 document.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else goFullscreen(); }

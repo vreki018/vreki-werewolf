@@ -10,6 +10,14 @@ You are Claude Code or Codex, running inside the folder of the "หมู่บ�
 - Do not change the game's code. Do not run `git` commands that change history. Do not delete folders.
 - Stop and ask when a step fails twice.
 
+## 0. Unblock the downloaded files
+
+If the folder came from a downloaded ZIP, Windows marks every file "from the internet" and double-clicking `start.bat` shows a security warning. Ask the user, then run in this folder:
+
+```
+powershell -NoProfile -Command "Get-ChildItem -Recurse | Unblock-File"
+```
+
 ## 1. Check what is already there
 
 Run each, note the result:
@@ -26,7 +34,8 @@ ffmpeg -version
 - **Python ≥ 3.10** is needed only for character voices. Missing → ask, then `winget install -e --id Python.Python.3.12`.
 - **At least one of Claude Code / Codex** (or a Gemini key, step 4) must work, or there is no AI to play.
   - Claude Code: needs **2.1.280 or newer** for `claude-opus-5-5`. Older → ask, then run `claude update`. Not installed → ask, then follow https://docs.claude.com/en/docs/claude-code (native installer or `npm install -g @anthropic-ai/claude-code`). The user must be logged in with their Claude plan: if `claude` says it is not logged in, tell the user to run `claude` in a terminal and log in themselves.
-  - Codex: not installed → ask, then `npm install -g @openai/codex@latest`. Login is the user's job: tell them to run `codex login` in a terminal.
+  - Codex: not installed, or `codex exec --help` does not list `--ignore-user-config` (too old for this game) → ask, then `npm install -g @openai/codex@latest`. Login is the user's job: tell them to run `codex login` in a terminal. `codex login status` shows whether they are logged in.
+  - `claude auth status --json` shows whether Claude Code is logged in (`"loggedIn": true`) without using quota.
   - You cannot log in for the user and must not handle their passwords.
 
 ## 2. Install the voice package

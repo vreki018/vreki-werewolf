@@ -78,7 +78,7 @@
   function chip(id) {
     const d = info.detect[id];
     const t = tests[id];
-    if (!d.ready) return `<span class="chip bad">${id === 'gemini' ? 'ยังไม่มีคีย์' : 'ยังไม่ได้ติดตั้ง'}</span>`;
+    if (!d.ready) return `<span class="chip bad">${id === 'gemini' ? 'ยังไม่มีคีย์' : /ล็อกอิน/.test(d.reason || '') ? 'ยังไม่ล็อกอิน' : 'ยังไม่ได้ติดตั้ง'}</span>`;
     if (t) return `<span class="chip ${t.ok ? 'good' : 'bad'}">${t.ok ? 'ใช้ได้' : 'มีปัญหา'}</span>`;
     return '<span class="chip">พร้อม</span>';
   }
@@ -88,7 +88,7 @@
       const d = info.detect[id];
       const on = settings.providers.includes(id) && d.ready;
       const t = tests[id];
-      const msg = t ? t.message : (d.ready ? '' : (id === 'gemini' ? 'ยังไม่มีคีย์ — วางคีย์ Gemini ด้านล่างแล้วกดบันทึก (ไม่บังคับ)' : d.reason || ''));
+      const msg = t ? t.message : (d.ready ? (d.warn || '') : (id === 'gemini' ? 'ยังไม่มีคีย์ — วางคีย์ Gemini ด้านล่างแล้วกดบันทึก (ไม่บังคับ)' : d.reason || ''));
       const key = id === 'gemini' ? `
         <div class="key-row">
           <input type="password" id="geminiKey" placeholder="${d.ready ? 'มีคีย์แล้ว · วางคีย์ใหม่เพื่อเปลี่ยน' : 'วางคีย์ Gemini (aistudio.google.com)'}" autocomplete="off" spellcheck="false">

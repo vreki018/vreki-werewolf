@@ -30,10 +30,10 @@ function openBrowser(url) {
 // one test-mode game on a free port, then exit (INSTALL-FOR-AI.md runs this)
 async function selftest() {
   process.env.VREKI_QUIET = '1';
-  const { start } = require('./server');
+  const { start, portTaken } = require('./server');
   let s = null;
   for (const port of PORTS) {
-    try { s = await start(port); break; } catch (e) { if (e.code !== 'EADDRINUSE') throw e; }
+    try { s = await start(port); break; } catch (e) { if (!portTaken(e)) throw e; }
   }
   if (!s) { console.log('เช็คไม่ผ่าน: ไม่มี port ว่าง'); return 1; }
   const base = `http://127.0.0.1:${s.port}`;
@@ -64,7 +64,7 @@ async function main() {
       return 0;
     }
   }
-  const { start } = require('./server');
+  const { start, portTaken } = require('./server');
   for (const port of PORTS) {
     try {
       const s = await start(port);
@@ -76,7 +76,7 @@ async function main() {
       openBrowser(url);
       return null; // keep running
     } catch (e) {
-      if (e.code !== 'EADDRINUSE') throw e;
+      if (!portTaken(e)) throw e;
     }
   }
   console.log(`เปิดเกมไม่ได้: port ${PORTS[0]}–${PORTS[PORTS.length - 1]} ถูกโปรแกรมอื่นใช้อยู่หมด`);

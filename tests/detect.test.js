@@ -51,6 +51,29 @@ test('an override path wins; a missing override is reported', async () => {
   assert.strictEqual(bad.ok, false);
 });
 
+test('Python in a folder with a Thai name is still found', { timeout: 120000 }, async () => {
+  const { resolvePython } = require('../app/detect');
+  const { execFileSync } = require('child_process');
+  const venv = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'ww-py-')), 'ผู้ใช้ทดสอบ');
+  try { execFileSync('py', ['-3', '-m', 'venv', '--without-pip', venv], { stdio: 'ignore' }); } catch (_) { return; } // no Python here: nothing to check
+  const r = await resolvePython(path.join(venv, 'Scripts', 'python.exe'));
+  assert.strictEqual(r.ok, true, JSON.stringify(r));
+  assert.ok(r.path.includes('ผู้ใช้ทดสอบ'), r.path);
+});
+
+test('login status is read without spending quota', () => {
+  const { parseLogin, versionTooOld } = require('../app/detect');
+  assert.strictEqual(parseLogin('claude', 0, '{"loggedIn": true, "authMethod": "claude.ai"}'), true);
+  assert.strictEqual(parseLogin('claude', 1, '{"loggedIn": false}'), false);
+  assert.strictEqual(parseLogin('claude', 1, "error: unknown command 'auth'"), null, 'an old CLI cannot tell → do not block');
+  assert.strictEqual(parseLogin('codex', 0, 'Logged in using ChatGPT'), true);
+  assert.strictEqual(parseLogin('codex', 1, 'Not logged in'), false);
+  assert.strictEqual(parseLogin('codex', 2, "error: unrecognized subcommand 'status'"), null);
+  assert.strictEqual(versionTooOld('2.1.136 (Claude Code)', '2.1.280'), true);
+  assert.strictEqual(versionTooOld('2.1.309 (Claude Code)', '2.1.280'), false);
+  assert.strictEqual(versionTooOld('garbage', '2.1.280'), false);
+});
+
 test('a shim without its package is not found (never run through cmd.exe)', async () => {
   const { d, touch } = shimDir();
   touch('codex.cmd');

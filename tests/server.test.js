@@ -18,6 +18,13 @@ test.after(() => srv.close());
 const get = (p) => fetch(base + p).then(async (r) => ({ status: r.status, body: await r.json() }));
 const post = (p, b) => fetch(base + p, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) }).then(async (r) => ({ status: r.status, body: await r.json() }));
 
+test('a port reserved by Windows (EACCES) counts as taken, so the launcher tries the next one', () => {
+  const { portTaken } = require('../app/server');
+  assert.strictEqual(portTaken({ code: 'EADDRINUSE' }), true);
+  assert.strictEqual(portTaken({ code: 'EACCES' }), true);
+  assert.strictEqual(portTaken({ code: 'ENOMEM' }), false);
+});
+
 test('status names the app', async () => {
   const r = await get('/api/status');
   assert.strictEqual(r.body.app, 'vreki-werewolf');

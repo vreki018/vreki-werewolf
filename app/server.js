@@ -52,7 +52,7 @@ function voiceFor(mode, det) {
 }
 
 function setupInfo(det, settings) {
-  const pub = (d) => ({ ready: d.ready, reason: d.reason || null });
+  const pub = (d) => ({ ready: d.ready, reason: d.reason || null, warn: d.warn || null });
   return {
     settings,
     detect: { claude: pub(det.claude), codex: pub(det.codex), gemini: pub(det.gemini), python: { ...pub(det.python), edgeTts: det.python.edgeTts }, ffmpeg: pub(det.ffmpeg) },
@@ -316,7 +316,10 @@ function start(port = CONFIG.port) {
   });
 }
 
-module.exports = { start, APP_ID };
+// in use by another program, or reserved by Windows (Hyper-V / WSL port ranges give EACCES)
+const portTaken = (e) => e && (e.code === 'EADDRINUSE' || e.code === 'EACCES');
+
+module.exports = { start, portTaken, APP_ID };
 
 if (require.main === module) {
   const argPort = Number((process.argv.find((a) => a.startsWith('--port=')) || '').slice(7));

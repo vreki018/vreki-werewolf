@@ -5,6 +5,15 @@
 const fs = require('fs');
 const path = require('path');
 const { callProvider } = require('./providers');
+const { explainError } = require('./detect');
+
+// a company that fails this many turns in a row stops the game (logged out, quota gone, …)
+const MAX_FAIL_STREAK = 3;
+const COST_NOTE = {
+  claude: 'ราคาเทียบ API ไม่ใช่เงินที่จ่ายจริง (เล่นด้วยโควต้าแพ็ก Claude)',
+  codex: 'ใช้โควต้าแพ็ก ChatGPT ไม่มีค่าใช้จ่ายแยก',
+  gemini: 'ประมาณจากราคาใน config.default.json (คีย์ฟรี = 0)',
+};
 
 const ROLE_TH = { wolf: 'หมาป่า', seer: 'หมอดู', doctor: 'หมอ', villager: 'ชาวบ้าน' };
 const GOD = { seats: [] }; // visible to god view only (plus nobody else)
@@ -42,6 +51,9 @@ class Game {
     this.pendingHuman = null;
     this.aborted = false;
     this.stats = {};
+    this.failStreak = {};  // provider → failed turns in a row
+    this.lastWarn = {};    // provider → last Thai warning shown (no repeats)
+    this.stopReason = null;
     this.codexLimits = { first: null, last: null };
     this.lastProtected = null;
     this.app = {
@@ -417,7 +429,18 @@ class Game {
     const target = names.length ? matchName(j.target || j.suspect, options) : null;
     if (names.length && j.target !== undefined && !target) this.emit('note', { text: `${p.name} ตอบชื่อที่ไม่มีในเกม ("${j.target}") ระบบสุ่มให้` }, GOD);
     if (!r.ok) this.emit('note', { text: `${p.name} (${p.provider}) ตอบไม่ได้: ${r.error}` }, GOD);
+    if (p.provider !== 'mock') this.trackFailure(p.provider, r, cfgP);
     return { thought: j.aside ?? j.thought, say: j.say, whisper: j.whisper, target: kind === 'speak' ? null : target, suspect: kind === 'speak' ? target : null };
+  }
+
+  // tells every view, in Thai, why a company is silent; stops the game when it keeps failing
+  trackFailure(provider, r, cfgP) {
+    if (r.ok) { this.failStreak[provider] = 0; return; }
+    if (this.aborted) return;
+    const msg = explainError(provider, `${r.error || ''} ${r.stderr || ''} ${r.text || ''}`, cfgP?.model);
+    const streak = (this.failStreak[provider] = (this.failStreak[provider] || 0) + 1);
+    if (msg !== this.lastWarn[provider]) { this.lastWarn[provider] = msg; this.emit('ai_error', { provider, text: msg }, 'all'); }
+    if (streak >= MAX_FAIL_STREAK) { this.stopReason = `หยุดเกม: ${msg}`; this.abort(); }
   }
 
   recordCall(p, kind, prompt, r, attempt, ctx) {
@@ -505,13 +528,13 @@ class Game {
       gameId: this.id, startedAt: new Date(this.t0).toISOString(), durationSec, winner,
       humanSeat: this.humanSeat, mock: !!this.opts.mock,
       models: Object.fromEntries(Object.entries(this.cfg.providers).filter(([k]) => ['claude', 'codex', 'gemini'].includes(k)).map(([k, v]) => [k, { company: v.company, model: v.model, effort: v.effort || null }])),
-      seats: reveal, stats: byProvider, codexRateLimits: this.codexLimits, voice: this.voice ? this.voiceStats : null,
+      seats: reveal, stats: byProvider, costNote: COST_NOTE, codexRateLimits: this.codexLimits, voice: this.voice ? this.voiceStats : null,
       days: this.events.filter((e) => e.type === 'phase' && e.phase === 'day').length,
     };
     fs.writeFileSync(path.join(this.dir, 'summary.json'), JSON.stringify(summary, null, 2));
     fs.writeFileSync(path.join(this.dir, 'transcript.md'), this.transcriptMd(summary));
     this.summary = summary;
-    const text = winner === 'village' ? 'ชาวบ้านชนะ! หมาป่าถูกกำจัดหมดแล้ว' : winner === 'wolves' ? 'หมาป่าชนะ! หมู่บ้านถูกยึดแล้ว' : winner === 'draw' ? 'เกมยาวเกินกำหนด เสมอกัน' : 'เกมถูกหยุด';
+    const text = winner === 'village' ? 'ชาวบ้านชนะ! หมาป่าถูกกำจัดหมดแล้ว' : winner === 'wolves' ? 'หมาป่าชนะ! หมู่บ้านถูกยึดแล้ว' : winner === 'draw' ? 'เกมยาวเกินกำหนด เสมอกัน' : (this.stopReason || 'เกมถูกหยุด');
     this.emit('game_over', { winner, text, reveal, durationSec });
     this.done = true;
   }
@@ -530,6 +553,11 @@ class Game {
       else if (e.type === 'night_action') out.push(`- ${ts} [${e.action}] ${name(e.seat)} → ${e.targetName}${e.result ? ` (${e.result === 'wolf' ? 'หมาป่า' : 'ไม่ใช่หมาป่า'})` : ''}`);
       else if (e.type === 'vote') out.push(`- ${ts} โหวต: ${name(e.seat)} → ${e.targetName}`);
       else if (e.type === 'note') out.push(`- ${ts} ⚠ ${e.text}`);
+      else if (e.type === 'ai_error') out.push(`- ${ts} ⚠ ${e.text}`);
+    }
+    out.push('', '## การใช้ AI', '');
+    for (const [pid, s] of Object.entries(summary.stats || {})) {
+      out.push(`- ${pid}: เรียก ${s.calls} ครั้ง (สำเร็จ ${s.ok})${s.costUsd ? ` · $${s.costUsd.toFixed(3)}` : ''}${COST_NOTE[pid] ? ` — ${COST_NOTE[pid]}` : ''}`);
     }
     return out.join('\n');
   }

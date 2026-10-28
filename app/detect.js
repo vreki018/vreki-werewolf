@@ -21,7 +21,8 @@ function whereExe(name) {
 
 function runPy(exe, args) {
   return new Promise((resolve) => {
-    execFile(exe, args, { windowsHide: true, timeout: 15000, encoding: 'utf8' }, (err, out) => resolve(err ? null : String(out)));
+    // utf-8 out: a Thai user name puts Python under a Thai path, which the ANSI code page cannot print
+    execFile(exe, args, { windowsHide: true, timeout: 15000, encoding: 'utf8', env: { ...process.env, PYTHONIOENCODING: 'utf-8' } }, (err, out) => resolve(err ? null : String(out)));
   });
 }
 
@@ -75,6 +76,47 @@ async function resolvePython(override) {
   return fallback || { ok: false, edgeTts: false, reason: 'หา Python 3.10 ขึ้นไปไม่เจอ' };
 }
 
+// login status without spending quota: `claude auth status --json` / `codex login status`
+// → true / false, or null when this CLI cannot tell (then the game does not block it)
+function parseLogin(name, code, out) {
+  const s = String(out || '');
+  if (name === 'claude') {
+    const m = s.match(/"loggedIn"\s*:\s*(true|false)/);
+    return m ? m[1] === 'true' : null;
+  }
+  if (/not logged in|no credentials|please (log|sign) ?in/i.test(s)) return false;
+  if (code === 0 && /logged in/i.test(s)) return true;
+  return null;
+}
+function versionTooOld(out, min) {
+  const m = String(out || '').match(/(\d+)\.(\d+)\.(\d+)/);
+  if (!m) return false;
+  const a = m.slice(1).map(Number), b = min.split('.').map(Number);
+  for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i] < b[i];
+  return false;
+}
+function runTool(tool, args) {
+  const [cmd, pre] = tool.runner === 'node' ? [process.execPath, [tool.path]] : [tool.path, []];
+  return new Promise((resolve) => {
+    execFile(cmd, [...pre, ...args], { windowsHide: true, timeout: 10000, encoding: 'utf8' }, (err, out, errOut) => {
+      resolve({ code: err ? (typeof err.code === 'number' ? err.code : 1) : 0, out: `${out || ''}${errOut || ''}` });
+    });
+  });
+}
+const MIN_CLAUDE = '2.1.280'; // first Claude Code that runs claude-opus-5-5
+
+// adds login / version facts to a found CLI: { ready, reason, warn }
+async function checkCli(name, tool) {
+  if (!tool.ok) return { ready: false, reason: explainError(name, 'not found') };
+  const st = await runTool(tool, name === 'claude' ? ['auth', 'status', '--json'] : ['login', 'status']);
+  if (parseLogin(name, st.code, st.out) === false) return { ready: false, reason: explainError(name, 'not logged in') };
+  if (name === 'claude') {
+    const v = await runTool(tool, ['--version']);
+    if (versionTooOld(v.out, MIN_CLAUDE)) return { ready: true, reason: null, warn: explainError('claude', 'or newer is required') };
+  }
+  return { ready: true, reason: null, warn: null };
+}
+
 let cache = null;
 async function detectAll(settings = {}, { refresh = false } = {}) {
   if (!refresh && cache && Date.now() - cache.at < 30000) return cache.value;
@@ -83,9 +125,10 @@ async function detectAll(settings = {}, { refresh = false } = {}) {
     resolveTool('claude', paths.claude), resolveTool('codex', paths.codex), resolvePython(paths.python), resolveTool('ffmpeg', paths.ffmpeg),
   ]);
   const keySet = exists(P.GEMINI_KEY_FILE) && fs.readFileSync(P.GEMINI_KEY_FILE, 'utf8').trim().length > 0;
+  const [cl, cx] = await Promise.all([checkCli('claude', claude), checkCli('codex', codex)]);
   const value = {
-    claude: { ready: claude.ok, path: claude.path || null, runner: claude.runner || null, reason: claude.ok ? null : explainError('claude', 'not found') },
-    codex: { ready: codex.ok, path: codex.path || null, runner: codex.runner || null, reason: codex.ok ? null : explainError('codex', 'not found') },
+    claude: { ...cl, path: claude.path || null, runner: claude.runner || null },
+    codex: { ...cx, path: codex.path || null, runner: codex.runner || null },
     gemini: { ready: keySet, reason: keySet ? null : explainError('gemini', 'no key file') },
     python: { ready: python.ok, path: python.path || null, edgeTts: !!python.edgeTts, reason: python.ok ? (python.edgeTts ? null : 'ยังไม่ได้ติดตั้ง edge-tts (pip install -r requirements.txt)') : python.reason },
     ffmpeg: { ready: ffmpeg.ok, path: ffmpeg.path || null },
@@ -104,17 +147,18 @@ function withTools(config, det) {
 
 // provider error → one Thai sentence the viewer can act on
 function explainError(provider, error, model) {
-  const e = String(error || '');
+  const e = String(error || '').trim();
   const name = { claude: 'Claude Code', codex: 'Codex', gemini: 'Gemini' }[provider] || provider;
   if (/^not found$|ENOENT|หาโปรแกรม/i.test(e)) return provider === 'gemini' ? 'ยังไม่มีคีย์ Gemini — ใส่คีย์ในหน้าตั้งค่า' : `ยังไม่ได้ติดตั้ง ${name} — ให้ AI ติดตั้งตาม INSTALL-FOR-AI.md`;
   if (provider === 'gemini' && /no key|no gemini key/i.test(e)) return 'ยังไม่มีคีย์ Gemini — ใส่คีย์ในหน้าตั้งค่า';
   if (provider === 'gemini' && /API key not valid|API_KEY_INVALID|PERMISSION_DENIED|HTTP 40[13]/i.test(e)) return 'คีย์ Gemini ใช้ไม่ได้ — เช็คว่าก๊อปคีย์มาครบ แล้วบันทึกใหม่';
-  if (/or newer is required|claude update|codex update|please upgrade|upgrade (the )?cli/i.test(e)) {
+  if (provider === 'gemini' && /limit:\s*0\b/i.test(e)) return 'คีย์ฟรีของ Gemini ใช้รุ่นนี้ไม่ได้ — เปลี่ยนรุ่นเป็นตระกูล Flash ในหน้าตั้งค่า (เช่น gemini-3.8-flash)';
+  if (/or newer is required|claude update|codex update|please upgrade|upgrade (the )?cli|unexpected argument|unknown option|unrecognized (option|argument)/i.test(e)) {
     return provider === 'codex' ? 'Codex เวอร์ชันเก่าเกินไปสำหรับรุ่นนี้ — เปิด terminal พิมพ์ npm install -g @openai/codex@latest แล้วลองใหม่'
       : 'Claude Code เวอร์ชันเก่าเกินไปสำหรับรุ่นนี้ — เปิด terminal พิมพ์ claude update แล้วลองใหม่';
   }
-  if (/\b429\b|usage limit|rate limit|quota|exhausted|too many requests/i.test(e)) return `โควต้าเต็ม (${name}) — รอให้รีเซ็ต หรือเลือกค่ายอื่นไปก่อน`;
-  if (/selected model|model\b.*\b(not supported|not exist|does not exist|not found|not available|access)|unknown model|invalid model/i.test(e)) return `แพ็กของคุณใช้รุ่น ${model || 'นี้'} ไม่ได้ — ลองเปลี่ยนรุ่นในหน้าตั้งค่า`;
+  if (/\b429\b|usage limit|rate limit|quota|exhausted|too many requests|hit your .{0,20}limit|session limit|weekly limit/i.test(e)) return `โควต้าเต็ม (${name}) — รอให้รีเซ็ต หรือเลือกค่ายอื่นไปก่อน`;
+  if (/selected model|models?\b.*\b(not supported|not exist|does not exist|not found|not available|access)|unknown model|invalid model/i.test(e)) return `แพ็กของคุณใช้รุ่น ${model || 'นี้'} ไม่ได้ — ลองเปลี่ยนรุ่นในหน้าตั้งค่า`;
   if (/\/login|not logged in|log ?in|\b401\b|unauthori[sz]ed|oauth|invalid api key|authenticat/i.test(e)) {
     return provider === 'codex' ? 'ยังไม่ได้ล็อกอิน Codex — เปิด terminal พิมพ์ codex login แล้วล็อกอินด้วยบัญชี ChatGPT'
       : 'ยังไม่ได้ล็อกอิน Claude Code — เปิด terminal พิมพ์ claude แล้วล็อกอินด้วยแพ็กของคุณ';
@@ -141,4 +185,4 @@ async function testProvider(id, config, det) {
   return { ok: false, ms: r.ms || 0, message: explainError(id, `${r.error || ''} ${r.stderr || ''} ${r.text || ''}`, pc.model), raw: String(r.error || '').slice(0, 300) };
 }
 
-module.exports = { resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };
+module.exports = { parseLogin, versionTooOld, resolveTool, resolvePython, detectAll, clearDetectCache, withTools, explainError, testProvider, LABEL };

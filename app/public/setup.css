@@ -3,6 +3,7 @@
 
 /* ---------- strip above the start buttons ---------- */
 .setup-strip { display: flex; justify-content: center; align-items: baseline; gap: 1.6vw; margin: -.6vh 0 2vh; color: #CFCAC0; font: 600 1.8vh 'Mali', sans-serif; }
+.strip-quota { margin: -1.4vh 0 1.6vh; color: #8E8A82; font: 500 1.45vh 'Sarabun', sans-serif; }
 .setup-strip .warn { color: #fff; background: var(--red); padding: .1vh .8vh .3vh; }
 .show-co { margin-top: 1.4vh; color: #CFCAC0; font: 600 1.7vh 'Mali', sans-serif; }
 .show-co small { opacity: .7; font-weight: 500; }
