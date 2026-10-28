@@ -23,7 +23,7 @@ const thinkStart = {};          // seat → when its thinking dots appeared on s
 const MIN_THINK = Number(params.get('think') || 10000); // same on-screen thinking time for every company
 
 // ---------------- sound effects ----------------
-const SFX_EXT = { night: 'wav', morning: 'wav', pop: 'wav', win_village: 'wav', win_wolves: 'wav', reveal_card: 'wav' };
+const SFX_EXT = {}; // every cue is an mp3 (app/public/sfx/SOURCES.md)
 const SFX_VOL = { start: .45, night: .3, night_amb: .04, morning: .4, death: .45, whoosh: .3, vote: .4, tick_loop: .12, vote_chip: .45, eliminate: .4, reveal_wolf: .45, reveal_good: .4, tie: .4, pop: .2, human_turn: .45, win_village: .45, win_wolves: .35, drumroll: .4, reveal_card: .4, role_card: .35 };
 let muted = params.get('mute') === '1';
 const loops = {};
