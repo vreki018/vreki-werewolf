@@ -307,7 +307,12 @@ async function callGeminiOnce(cfg, app, { system, prompt, kind }) {
   clearTimeout(timer);
   const ms = Date.now() - t0;
   const res = { ms, raw: raw.slice(0, 4000) };
-  if (!j || status !== 200) return { ...res, ok: false, error: `HTTP ${status}: ${(j?.error?.message || raw).slice(0, 200)}` };
+  if (!j || status !== 200) {
+    const msg = String(j?.error?.message || raw);
+    // a free key on a paid-only model: "limit: 0" sits far down Google's 429 text — keep it for explainError
+    const zero = /limit:\s*0\b/.test(msg) && !/limit:\s*0\b/.test(msg.slice(0, 200)) ? ' … limit: 0' : '';
+    return { ...res, ok: false, error: `HTTP ${status}: ${msg.slice(0, 200)}${zero}` };
+  }
   const um = j.usageMetadata || {};
   const usage = {
     input: um.promptTokenCount || 0, output: um.candidatesTokenCount || 0, thinking: um.thoughtsTokenCount || 0,
